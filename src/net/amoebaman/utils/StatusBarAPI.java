@@ -10,7 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
- * 
  * Assorted methods for manipulating packets to spawn fake Ender Dragons and show players a
  * status bar at the top of the screen using their health bar.  This class uses reflection, so
  * even though it accesses NSM methods it should be version-safe (assuming the names of classes
@@ -21,7 +20,6 @@ import org.bukkit.entity.Player;
  * uses a trimmed down version of my own {@link PlayerMap} class to store the fake dragons.
  * 
  * @author AmoebaMan
- *
  */
 public class StatusBarAPI {
 

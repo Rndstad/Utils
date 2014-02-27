@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 
 /**
- * 
  * This class contains utilities for working with Minecraft's chat box, to make pretty and understandable
  * text easier to code.  The {@link ColorScheme} enum is specifically designed so that multiple plugins can
  * use the same color scheme, which can later be changed at will via a configuration.
@@ -17,7 +16,6 @@ import org.bukkit.DyeColor;
  * likely be slightly off if you use a texture pack that changes the font.
  * 
  * @author AmoebaMan
- *
  */
 public class ChatUtils {
 
