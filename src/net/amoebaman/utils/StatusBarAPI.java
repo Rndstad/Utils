@@ -66,7 +66,9 @@ public class StatusBarAPI {
      * @param percent a decimal percent in the range (0,1]
      */
     public static void setStatusBar(Player player, String text, float percent) {
-
+    	if(player == null || !player.isValid() || player.isDead())
+    		return;
+    	
         FakeDragon dragon = DRAGONS.containsKey(player) ? DRAGONS.get(player) : null;
 
         if(text.length() > 64)
@@ -78,7 +80,6 @@ public class StatusBarAPI {
 
         if (text.isEmpty() && dragon != null)
             removeStatusBar(player);
-
         if (dragon == null) {
             dragon = new FakeDragon(player.getLocation().add(0, -200, 0), text, percent);
             sendPacket(player, dragon.getSpawnPacket());
@@ -153,7 +154,7 @@ public class StatusBarAPI {
         }
 
         public void setHealth(float percent) {
-            this.health = percent / MAX_HEALTH;
+            this.health = percent * MAX_HEALTH;
         }
 
         public void setName(String name) {
