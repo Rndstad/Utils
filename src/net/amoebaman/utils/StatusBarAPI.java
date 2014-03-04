@@ -75,8 +75,8 @@ public class StatusBarAPI {
             text = text.substring(0, 63);
         if(percent > 1.0f)
             percent = 1.0f;
-        if(percent < 0.05f)
-            percent = 0.05f;
+        if(percent < 0.005f)
+            percent = 0.005f;
 
         if (text.isEmpty() && dragon != null)
             removeStatusBar(player);
