@@ -204,7 +204,10 @@ public class CommandController implements CommandExecutor{
 					for(int i = 0; i < newArgs.length; i++)
 						newArgs[i] = args[i + (id.length - 1)];
 					try {
-						cmd.method.invoke(cmd.instance, sender, newArgs);
+						if(cmd.method.getReturnType().equals(String[].class))
+							sender.sendMessage((String[]) cmd.method.invoke(cmd.instance, sender, newArgs));
+						else
+							cmd.method.invoke(cmd.instance, sender, newArgs);
 						return true;
 					}
 					catch (Exception e) {
