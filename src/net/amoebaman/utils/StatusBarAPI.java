@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 public class StatusBarAPI {
 
     private static PlayerMap<FakeDragon> DRAGONS = new PlayerMap<FakeDragon>();
+    private static PlayerMap<Integer> EXPIRY_TASKS = new PlayerMap<Integer>(-1);
 
     /**
      * Checks to see if the player is currently being displayed a status bar via fake Ender Dragon.
@@ -64,11 +65,11 @@ public class StatusBarAPI {
      * @param player a player
      * @param text some text with 64 characters or less
      * @param percent a decimal percent in the range (0,1]
+     * @param duration the duration in seconds of this status bar (0 is infinity)
      */
-    public static void setStatusBar(Player player, String text, float percent) {
+    public static void setStatusBar(final Player player, String text, float percent, float duration) {
     	if(player == null || !player.isValid() || player.isDead())
     		return;
-    	
         FakeDragon dragon = DRAGONS.containsKey(player) ? DRAGONS.get(player) : null;
 
         if(text.length() > 64)
@@ -91,6 +92,11 @@ public class StatusBarAPI {
             sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
             sendPacket(player, dragon.getTeleportPacket(player.getLocation().add(0, -200, 0)));
         }
+        Bukkit.getScheduler().cancelTask(EXPIRY_TASKS.get(player));
+        if(duration > 0)
+        	EXPIRY_TASKS.put(player, Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugins()[0], new Runnable(){ public void run(){
+        		removeStatusBar(player);
+        	}}, (long) (20 * percent)));
 
     }
 
@@ -106,10 +112,11 @@ public class StatusBarAPI {
      * Sets the status bar for all players on the server.  See {@link #setStatusBar(Player, String, float)}.
      * @param text some text with 64 characters or less
      * @param percent a decimal percent in the range (0,1]
+     * @param duration the duration in seconds of this status bar (0 is infinity)
      */
-    public static void setAllStatusBars(String text, float percent){
+    public static void setAllStatusBars(String text, float percent, float duration){
         for(Player each : Bukkit.getOnlinePlayers())
-            setStatusBar(each, text, percent);
+            setStatusBar(each, text, percent, duration);
     }
 
     private static void sendPacket(Player player, Object packet) {
