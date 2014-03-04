@@ -96,7 +96,7 @@ public class StatusBarAPI {
         if(duration > 0)
         	EXPIRY_TASKS.put(player, Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugins()[0], new Runnable(){ public void run(){
         		removeStatusBar(player);
-        	}}, (long) (20 * percent)));
+        	}}, (long) (20 * duration)));
 
     }
 
