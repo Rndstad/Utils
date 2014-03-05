@@ -1,0 +1,7 @@
+main: net.amoebaman.utils.Utils
+
+name: APIUtils
+version: 1.0
+author: AmoebaMan
+website: www.amoebaman.net
+description: Provides lots of generally useful tools for developers
