@@ -1,4 +1,4 @@
-main: net.amoebaman.utils.Utils
+main: net.amoebaman.utils.APIUtils
 
 name: APIUtils
 version: 1.0
