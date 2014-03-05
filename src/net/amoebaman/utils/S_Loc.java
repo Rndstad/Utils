@@ -80,10 +80,10 @@ public class S_Loc{
 	 * is improperly formatted, this method will return null;
 	 * 
 	 * @param str a location string
-	 * @param center whether or not to automatically add 0.5 to x and y (usually for nice-looking teleportation)
+	 * @param round whether or not to automatically snap the location to block centers (usually for nice teleportation)
 	 * @return the location saved, or null if the string is improperly formatted
 	 */
-	public static Location stringLoad(String str, boolean center){
+	public static Location stringLoad(String str, boolean round){
 		if(str == null)
 			return null;
 		try{
@@ -95,8 +95,8 @@ public class S_Loc{
 				toReturn.setYaw(Float.parseFloat(coords[3]));
 				toReturn.setPitch(Float.parseFloat(coords[4]));
 			}
-			if(center)
-				toReturn.add(0.5, 0, 0.5);
+			if(round)
+				toReturn = toReturn.getBlock().getLocation().add(0.5, 0, 0.5);
 			return toReturn;	
 		}
 		catch(Exception e){
