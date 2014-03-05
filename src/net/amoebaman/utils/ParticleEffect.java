@@ -100,7 +100,7 @@ public enum ParticleEffect {
 	 * @param offsetZ the maximum random z offset
 	 * @param amount the amount of particles
 	 */
-	public static void playTileCrack(Player p, Location loc, int id, byte data, float offsetX, float offsetY, float offsetZ, int amount) {
+	public static void playBlockCrack(Player p, Location loc, int id, byte data, float offsetX, float offsetY, float offsetZ, int amount) {
 		sendPacket(p, createTileCrackPacket(id, data, loc, offsetX, offsetY, offsetZ, amount));
 	}
 
@@ -113,7 +113,7 @@ public enum ParticleEffect {
 	 * @param offsetZ the maximum random z offset
 	 * @param amount the amount of particles
 	 */
-	public static void playTileCrack(Location loc, int id, byte data, float offsetX, float offsetY, float offsetZ, int amount) {
+	public static void playBlockCrack(Location loc, int id, byte data, float offsetX, float offsetY, float offsetZ, int amount) {
 		Object packet = createTileCrackPacket(id, data, loc, offsetX, offsetY, offsetZ, amount);
 		for (Player p : loc.getWorld().getPlayers()) {
 			sendPacket(p, packet);
@@ -155,7 +155,7 @@ public enum ParticleEffect {
 	}
 	
 	private static Object createTileCrackPacket(int id, byte data, Location loc, float offsetX, float offsetY, float offsetZ, int amount) {
-		return createPacket("tilecrack_" + id + "_" + data, loc, offsetX, offsetY, offsetZ, 0.1F, amount);
+		return createPacket("blockcrack_" + id + "_" + data, loc, offsetX, offsetY, offsetZ, 0.1F, amount);
 	}
 	
 	private static Object createIconCrackPacket(int id, byte data, Location loc, float offsetX, float offsetY, float offsetZ, int amount) {
