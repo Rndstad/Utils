@@ -26,7 +26,7 @@
  * either expressed or implied, of anybody else.
  */
 
-package net.amoebaman.utils;
+package net.amoebaman.utils.plugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;

@@ -1,7 +1,9 @@
-package net.amoebaman.utils;
+package net.amoebaman.utils.nms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import net.amoebaman.utils.maps.PlayerMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +23,7 @@ import org.bukkit.entity.Player;
  * 
  * @author AmoebaMan
  */
-public class StatusBarAPI {
+public class StatusBar {
 
     private static PlayerMap<FakeDragon> DRAGONS = new PlayerMap<FakeDragon>();
     private static PlayerMap<Integer> EXPIRY_TASKS = new PlayerMap<Integer>(-1);

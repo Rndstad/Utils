@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.utils.nms;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

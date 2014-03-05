@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.utils.maps;
 
 import java.util.HashMap;
 import java.util.HashSet;
