@@ -57,13 +57,9 @@ public class StatusBar {
     /**
      * Sets a player's status bar to display a specific message and fill amount.  The fill amount is in
      * decimal percent (i.e. 1 = 100%, 0 = 0%, 0.5 = 50%, 0.775 = 77.5%, etc.).
-     * <br><br>
-     * <code>text</code> is limited to 64 characters, and <code>percent</code> must be greater than zero
-     * and less than or equal to one.  If either argument is outside its constraints, it will be quietly
-     * trimmed to match.
      * 
      * @param player a player
-     * @param text some text with 64 characters or less
+     * @param text some text
      * @param percent a decimal percent in the range (0,1]
      * @param duration the duration in seconds of this status bar (0 is infinity)
      */
@@ -71,9 +67,7 @@ public class StatusBar {
     	if(player == null || !player.isValid() || player.isDead())
     		return;
         FakeDragon dragon = DRAGONS.containsKey(player) ? DRAGONS.get(player) : null;
-
-        if(text.length() > 64)
-            text = text.substring(0, 63);
+        
         if(percent > 1.0f)
             percent = 1.0f;
         if(percent < 0.005f)
