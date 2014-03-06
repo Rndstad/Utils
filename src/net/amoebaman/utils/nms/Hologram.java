@@ -357,15 +357,15 @@ public class Hologram {
 	
 	public static class Backend{
 		
-		private static Class nmsEntity = ReflectionUtil.getNMSClass("Entity");
-		private static Class nmsEntityInsentient = ReflectionUtil.getNMSClass("EntityInsentient");
-		private static Class nmsHorse = ReflectionUtil.getNMSClass("EntityHorse");
-		private static Class nmsWorld = ReflectionUtil.getNMSClass("World");
-		private static Class nmsWitherSkeleton = ReflectionUtil.getNMSClass("EntityWitherSkull");
-		private static Class nmsFireball = ReflectionUtil.getNMSClass("EntityFireball");
+		private static Class<?> nmsEntity = ReflectionUtil.getNMSClass("Entity");
+		private static Class<?> nmsEntityInsentient = ReflectionUtil.getNMSClass("EntityInsentient");
+		private static Class<?> nmsHorse = ReflectionUtil.getNMSClass("EntityHorse");
+		private static Class<?> nmsWorld = ReflectionUtil.getNMSClass("World");
+		private static Class<?> nmsWitherSkeleton = ReflectionUtil.getNMSClass("EntityWitherSkull");
+		private static Class<?> nmsFireball = ReflectionUtil.getNMSClass("EntityFireball");
 		
-		private static Constructor nmsHorseCons;
-		private static Constructor nmsWitherSkeletonCons;
+		private static Constructor<?> nmsHorseCons;
+		private static Constructor<?> nmsWitherSkeletonCons;
 		static{
 			try {
 				nmsHorseCons = nmsHorse.getConstructor(nmsWorld);
