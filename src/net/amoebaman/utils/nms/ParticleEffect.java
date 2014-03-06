@@ -1,6 +1,5 @@
 package net.amoebaman.utils.nms;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -178,10 +177,9 @@ public enum ParticleEffect {
 	        ReflectionUtil.getField(packetClass, "h").set(packet, speed);
 	        ReflectionUtil.getField(packetClass, "i").set(packet, amount);
 			return packet;
-		} catch (Exception e) {
-			Bukkit.getLogger().warning("[ParticleEffect] Failed to create a particle packet! " + packet);
-			return null;
 		}
+		catch (Exception e) { e.printStackTrace(); }
+		return null;
 	}
 	
 	private static void sendPacket(Player p, Object packet) {
@@ -192,8 +190,7 @@ public enum ParticleEffect {
 			Object entityPlayer = ReflectionUtil.getMethod(p.getClass(), "getHandle").invoke(p);
 			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
 			ReflectionUtil.getMethod(playerConnection.getClass(), "sendPacket").invoke(playerConnection, packet);
-		} catch (Exception e) {
-			Bukkit.getLogger().warning("[ParticleEffect] Failed to send a particle packet to " + p.getName() + "!");
 		}
+		catch (Exception e) { e.printStackTrace(); }
 	}
 }

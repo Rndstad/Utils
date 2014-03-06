@@ -45,6 +45,8 @@ public class ReflectionUtil {
 
     public static Field getField(Class<?> cl, String field_name) {
         try {
+        	Field field = cl.getDeclaredField(field_name);
+        	field.setAccessible(true);
             return cl.getDeclaredField(field_name);
         }
         catch (Exception e) {
@@ -53,17 +55,12 @@ public class ReflectionUtil {
         }
     }
 
-    public static Method getMethod(Class<?> cl, String method) {
-        for (Method m : cl.getMethods()) 
-            if (m.getName().equals(method))
-                return m;
-        return null;
-    }
-
     public static Method getMethod(Class<?> cl, String method, Class<?>... args) {
         for (Method m : cl.getMethods()) 
-            if (m.getName().equals(method) && ClassListEqual(args, m.getParameterTypes()))
+            if (m.getName().equals(method) && (args.length == 0 || ClassListEqual(args, m.getParameterTypes()))){
+            	m.setAccessible(true);
                 return m;
+            }
         return null;
     }
 
