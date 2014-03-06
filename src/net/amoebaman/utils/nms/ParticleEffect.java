@@ -1,9 +1,5 @@
 package net.amoebaman.utils.nms;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -163,21 +159,24 @@ public enum ParticleEffect {
 	}
 	
 	private static Object createPacket(String effectName, Location loc, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+		Class<?> packetClass = null;
 		Object packet = null;
 		try {
 			if (amount <= 0) {
 				throw new IllegalArgumentException("Amount of particles has to be greater than 0!");
 			}
-	        packet = ReflectionUtil.getClass("PacketPlayOutWorldParticles");
-			ReflectionUtil.setValue(packet, "a", effectName);
-			ReflectionUtil.setValue(packet, "b", (float) loc.getX());
-			ReflectionUtil.setValue(packet, "c", (float) loc.getY());
-			ReflectionUtil.setValue(packet, "d", (float) loc.getZ());
-			ReflectionUtil.setValue(packet, "e", offsetX);
-			ReflectionUtil.setValue(packet, "f", offsetY);
-			ReflectionUtil.setValue(packet, "g", offsetZ);
-			ReflectionUtil.setValue(packet, "h", speed);
-			ReflectionUtil.setValue(packet, "i", amount);
+			packetClass = ReflectionUtil.getNMSClass("PacketPlayOutWorldParticles");
+	        packet = packetClass.getConstructor().newInstance();
+	        
+	        ReflectionUtil.getField(packetClass, "a").set(packet, effectName);
+	        ReflectionUtil.getField(packetClass, "b").set(packet, (float) loc.getX());
+	        ReflectionUtil.getField(packetClass, "c").set(packet, (float) loc.getY());
+	        ReflectionUtil.getField(packetClass, "d").set(packet, (float) loc.getZ());
+	        ReflectionUtil.getField(packetClass, "e").set(packet, offsetX);
+	        ReflectionUtil.getField(packetClass, "f").set(packet, offsetY);
+	        ReflectionUtil.getField(packetClass, "g").set(packet, offsetZ);
+	        ReflectionUtil.getField(packetClass, "h").set(packet, speed);
+	        ReflectionUtil.getField(packetClass, "i").set(packet, amount);
 			return packet;
 		} catch (Exception e) {
 			Bukkit.getLogger().warning("[ParticleEffect] Failed to create a particle packet! " + packet);
@@ -190,47 +189,11 @@ public enum ParticleEffect {
 			return;
 		}
 		try {
-			Object entityPlayer = ReflectionUtil.getMethod("getHandle", p.getClass(), 0).invoke(p);
+			Object entityPlayer = ReflectionUtil.getMethod(p.getClass(), "getHandle").invoke(p);
 			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
-			ReflectionUtil.getMethod("sendPacket", playerConnection.getClass(), 1).invoke(playerConnection, packet);
+			ReflectionUtil.getMethod(playerConnection.getClass(), "sendPacket").invoke(playerConnection, packet);
 		} catch (Exception e) {
 			Bukkit.getLogger().warning("[ParticleEffect] Failed to send a particle packet to " + p.getName() + "!");
-		}
-	}
-	
-	private static class ReflectionUtil {
-		
-		public static Object getClass(String name, Object... args) throws Exception {
-			Class<?> c = Class.forName(ReflectionUtil.getPackageName() + "." + name);
-			int params = 0;
-			if (args != null) {
-				params = args.length;
-			}
-			for (Constructor<?> co : c.getConstructors()) {
-				if (co.getParameterTypes().length == params) {
-					return co.newInstance(args);
-				}
-			}
-			return null;
-		}
-		
-		public static Method getMethod(String name, Class<?> c, int params) {
-			for (Method m : c.getMethods()) {
-				if (m.getName().equals(name) && m.getParameterTypes().length == params) {
-					return m;
-				}
-			}
-			return null;
-		}
-		
-		public static void setValue(Object instance, String fieldName, Object value) throws Exception {
-			Field field = instance.getClass().getDeclaredField(fieldName);
-			field.setAccessible(true);
-			field.set(instance, value);
-		}
-		
-		public static String getPackageName() {
-			return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 		}
 	}
 }
