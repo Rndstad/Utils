@@ -159,6 +159,9 @@ public class CommandController implements CommandExecutor{
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
 		
+		AnnotatedPluginCommand theCmd = null;
+		String[] theId = new String[]{};
+		
 		/*
 		 * For all registered commands...
 		 */
@@ -183,41 +186,49 @@ public class CommandController implements CommandExecutor{
 						if(!id[i].equals(args[i - 1]))
 							continue cmds;
 					/*
-					 * Verify that the correct sender was used
+					 * If this is the longest matching command we've seen yet, fixate it
 					 */
-					if(!cmd.getSenderType().isAssignableFrom(sender.getClass())){
-						sender.sendMessage(ChatColor.RED + "This command must be sent by a " + cmd.getSenderType().getCanonicalName());
-						return true;
+					if(id.length >= theId.length){
+						theCmd = cmd;
+						theId = id;
 					}
-					/*
-					 * Make sure the sender has permissions
-					 */
-					for(String node : cmd.permissions)
-						if(!sender.hasPermission(node)){
-							sender.sendMessage(cmd.permissionsMessage);
-							return true;
-						}
-					/*
-					 * Trim down the args and try to process the command
-					 */
-					String[] newArgs = new String[args.length - (id.length - 1)];
-					for(int i = 0; i < newArgs.length; i++)
-						newArgs[i] = args[i + (id.length - 1)];
-					try {
-						if(cmd.method.getReturnType().equals(String[].class))
-							sender.sendMessage((String[]) cmd.method.invoke(cmd.instance, sender, newArgs));
-						else
-							cmd.method.invoke(cmd.instance, sender, newArgs);
-						return true;
-					}
-					catch (Exception e) {
-						sender.sendMessage(ChatColor.RED + "An error occurred while trying to process the command");
-						e.printStackTrace();
-					}
+					
 				}
-	
-	return false;
-	
+		/*
+		 * Verify that the correct sender was used
+		 */
+		if(!theCmd.getSenderType().isAssignableFrom(sender.getClass())){
+			sender.sendMessage(ChatColor.RED + "This command must be sent by a " + theCmd.getSenderType().getCanonicalName());
+			return true;
+		}
+		/*
+		 * Make sure the sender has permissions
+		 */
+		for(String node : theCmd.permissions)
+			if(!sender.hasPermission(node)){
+				sender.sendMessage(theCmd.permissionsMessage);
+				return true;
+			}
+		/*
+		 * Trim down the args and try to process the command
+		 */
+		String[] newArgs = new String[args.length - (theId.length - 1)];
+		for(int i = 0; i < newArgs.length; i++)
+			newArgs[i] = args[i + (theId.length - 1)];
+		try {
+			if(theCmd.method.getReturnType().equals(String[].class))
+				sender.sendMessage((String[]) theCmd.method.invoke(theCmd.instance, sender, newArgs));
+			else
+				theCmd.method.invoke(theCmd.instance, sender, newArgs);
+			return true;
+		}
+		catch (Exception e) {
+			sender.sendMessage(ChatColor.RED + "An error occurred while trying to process the command");
+			e.printStackTrace();
+		}
+		
+		return false;
+		
 	}
 	
 }
