@@ -1,7 +1,10 @@
 package net.amoebaman.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.util.com.google.common.collect.Lists;
 
@@ -357,6 +360,29 @@ public class Json {
 
 	public static FireworkMeta readFirework(JsonReader json){
 		return readFirework(json, (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK));
+	}
+	
+	public static JsonWriter writeMap(JsonWriter json, Map<String,String> map){
+		try{
+			json.beginObject();
+			for(Entry<String,String> entry : map.entrySet())
+				json.name(entry.getKey()).value(entry.getValue());
+			json.endObject();
+		}
+		catch(Exception e){ e.printStackTrace(); }
+		return json;
+	}
+	
+	public static Map<String,String> readMap(JsonReader json){
+		Map<String,String> map = new HashMap<String,String>();
+		try{
+			json.beginObject();
+			while(json.peek() != JsonToken.END_OBJECT)
+				map.put(json.nextString(), json.nextString());
+			json.endObject();
+		}
+		catch(Exception e){ e.printStackTrace(); }
+		return map;
 	}
 	
 }
