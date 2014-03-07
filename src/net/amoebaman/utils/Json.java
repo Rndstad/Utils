@@ -34,7 +34,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class Json {
 	
-	public static void writeItems(JsonWriter json, Iterable<ItemStack> items){
+	public static JsonWriter writeItems(JsonWriter json, Iterable<ItemStack> items){
 		try{
 			json.beginArray();
 			for(ItemStack item : items)
@@ -42,10 +42,11 @@ public class Json {
 			json.endArray();
 		}
 		catch(Exception e){ e.printStackTrace(); }
+		return json;
 	}
 	
-	public static void writeItems(JsonWriter json, ItemStack... items){
-		writeItems(json, Lists.newArrayList(items));
+	public static JsonWriter writeItems(JsonWriter json, ItemStack... items){
+		return writeItems(json, Lists.newArrayList(items));
 	}
 	
 	public static List<ItemStack> readItems(JsonReader json){
@@ -63,8 +64,7 @@ public class Json {
 		return items;
 	}
 	
-	public static void writeItem(JsonWriter json, ItemStack stack){
-		
+	public static JsonWriter writeItem(JsonWriter json, ItemStack stack){
 		try{
 			json.beginObject();
 			
@@ -115,6 +115,7 @@ public class Json {
 			json.endObject();
 		}
 		catch(Exception e){ e.printStackTrace(); }
+		return json;
 	}
 	
 	public static ItemStack readItem(JsonReader json){
