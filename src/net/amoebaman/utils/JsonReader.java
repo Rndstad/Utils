@@ -21,9 +21,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader {
 	
-	public JsonReader(String str) {
-		super(new StringReader(str));
-	}
+	public JsonReader(String str) { super(new StringReader(str)); }
+	
+	public void close(){ try{ super.close(); } catch(Exception e){ e.printStackTrace(); } }
 	
 	public List<ItemStack> readItemList() {
 		List<ItemStack> items = new ArrayList<ItemStack>();

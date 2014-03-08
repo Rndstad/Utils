@@ -51,6 +51,13 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	public JsonWriter value(long value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
 	public JsonWriter value(Number value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
 	public JsonWriter value(String value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public void close(){ try{ super.close(); } catch(Exception e){ e.printStackTrace(); } }
+	
+	public String closeOut(){
+		String result = toString();
+		close();
+		return result;
+	}
 	
 	public JsonWriter writeItemList(Iterable<ItemStack> items) {
 		beginArray();
