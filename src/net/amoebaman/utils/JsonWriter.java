@@ -39,23 +39,20 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	public JsonWriter(StringWriter out) { super(out); this.out = out; }
 	
 	public StringWriter getWriter() { return out; }
-	public String toString() { return out == null ? "closed" : out.toString(); }
+	public String toString() { return out == null ? null : out.toString(); }
 	
-	public JsonWriter beginObject() throws IOException { return (JsonWriter) super.beginObject(); }
-	public JsonWriter beginArray() throws IOException { return (JsonWriter) super.beginArray(); }
-	public JsonWriter endObject() throws IOException { return (JsonWriter) super.endObject(); }
-	public JsonWriter endArray() throws IOException { return (JsonWriter) super.endArray(); }
-	public JsonWriter name(String name) throws IOException { return (JsonWriter) super.name(name); }
-	public JsonWriter key(String name) throws IOException { return (JsonWriter) super.name(name); }
-	public JsonWriter value(boolean value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter value(double value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter value(int value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter value(long value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter value(Number value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter value(String value) throws IOException { return (JsonWriter) super.value(value); }
-	public JsonWriter closeAndReturn() throws IOException { close(); return this; }
+	public JsonWriter beginObject() { try{ return (JsonWriter) super.beginObject(); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter beginArray() { try{ return (JsonWriter) super.beginArray(); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter endObject() { try{ return (JsonWriter) super.endObject(); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter endArray() { try{ return (JsonWriter) super.endArray(); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter name(String name) { try{ return (JsonWriter) super.name(name); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter value(boolean value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter value(double value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter value(long value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter value(Number value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
+	public JsonWriter value(String value) { try{ return (JsonWriter) super.value(value); } catch(Exception e){ e.printStackTrace(); return this; } }
 	
-	public JsonWriter writeItemList(Iterable<ItemStack> items) throws IOException {
+	public JsonWriter writeItemList(Iterable<ItemStack> items) {
 		beginArray();
 		for (ItemStack item : items)
 			writeItem(item);
@@ -63,7 +60,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeItemList(ItemStack... items) throws IOException {
+	public JsonWriter writeItemList(ItemStack... items) {
 		beginArray();
 		for (ItemStack item : items)
 			writeItem(item);
@@ -71,7 +68,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeItem(ItemStack item) throws IOException {
+	public JsonWriter writeItem(ItemStack item) {
 		beginObject();
 		
 		if (item != null && item.getType() != Material.AIR) {
@@ -122,7 +119,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeEffectList(List<PotionEffect> effects) throws IOException {
+	public JsonWriter writeEffectList(List<PotionEffect> effects) {
 		beginArray();
 		for (PotionEffect effect : effects) {
 			beginObject();
@@ -135,7 +132,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeBook(BookMeta book) throws IOException {
+	public JsonWriter writeBook(BookMeta book) {
 		beginObject();
 		name("title").value(book.getTitle());
 		name("author").value(book.getAuthor());
@@ -147,7 +144,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeBurst(FireworkEffect burst) throws IOException {
+	public JsonWriter writeBurst(FireworkEffect burst) {
 		beginObject();
 		name("type").value(burst.getType().name());
 		name("primary").beginArray();
@@ -164,7 +161,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeFirework(FireworkMeta firework) throws IOException {
+	public JsonWriter writeFirework(FireworkMeta firework) {
 		beginObject();
 		name("fuse").value(firework.getPower());
 		name("bursts").beginArray();
@@ -175,7 +172,7 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeMap(Map<String, String> map) throws IOException {
+	public JsonWriter writeMap(Map<String, String> map) {
 		beginObject();
 		for (Entry<String, String> entry : map.entrySet())
 			name(entry.getKey()).value(entry.getValue());
@@ -183,13 +180,13 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeLoc(Location loc, boolean round, boolean rotation) throws IOException{
+	public JsonWriter writeLoc(Location loc, boolean round, boolean rotation) throws IOException {
 		beginObject();
 		name("world").value(loc.getWorld().getName());
 		name("x").value(round ? loc.getBlockX() + 0.5 : loc.getX());
 		name("y").value(round ? loc.getBlockY() : loc.getY());
 		name("z").value(round ? loc.getBlockZ() + 0.5 : loc.getZ());
-		if(rotation){
+		if (rotation) {
 			name("pitch").value(round ? Math.round(loc.getPitch() * 22.5) / 22.5 : loc.getPitch());
 			name("yaw").value(round ? Math.round(loc.getYaw() * 22.5) / 22.5 : loc.getYaw());
 		}

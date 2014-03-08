@@ -25,210 +25,246 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		super(new StringReader(str));
 	}
 	
-	public List<ItemStack> readItemList() throws IOException {
+	public List<ItemStack> readItemList() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		beginArray();
-		while (hasNext() && peek() != JsonToken.END_ARRAY)
-			items.add(readItem());
-		endArray();
+		try {
+			beginArray();
+			while (hasNext() && peek() != JsonToken.END_ARRAY)
+				items.add(readItem());
+			endArray();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return items;
 	}
 	
-	public ItemStack readItem() throws IOException {
+	public ItemStack readItem() {
 		
 		ItemStack item = new ItemStack(Material.AIR);
 		ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-		
-		beginObject();
-		
-		while (hasNext() && peek() != JsonToken.END_OBJECT) {
-			String name = nextName();
-			if (name.equals("type")) {
-				item.setType(Material.getMaterial(nextString()));
-				meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-			}
-			if (name.equals("data"))
-				item.setDurability((short) nextInt());
-			if (name.equals("amount"))
-				item.setAmount(nextInt());
-			if (name.equals("enchants")) {
-				beginObject();
-				while (peek() != JsonToken.END_OBJECT)
-					if (meta instanceof EnchantmentStorageMeta)
-						((EnchantmentStorageMeta) meta).addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
-					else
-						meta.addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
-				endObject();
-			}
+		try {
+			beginObject();
 			
-			if (name.equals("meta")) {
-				beginObject();
-				while (peek() != JsonToken.END_OBJECT) {
-					name = nextName();
-					if (name.equals("name"))
-						meta.setDisplayName(nextString());
-					if (name.equals("lore")) {
-						beginArray();
-						List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<String>();
-						while (peek() != JsonToken.END_ARRAY)
-							lore.add(nextString());
-						meta.setLore(lore);
-						endArray();
-					}
-					if (name.equals("color"))
-						((LeatherArmorMeta) meta).setColor(Color.fromRGB(nextInt()));
-					if (name.equals("skull"))
-						((SkullMeta) meta).setOwner(nextString());
-					if (name.equals("map"))
-						((MapMeta) meta).setScaling(nextBoolean());
-					if (name.equals("effects"))
-						for (PotionEffect effect : readEffectList())
-							((PotionMeta) meta).addCustomEffect(effect, true);
-					if (name.equals("book"))
-						readBook((BookMeta) meta);
-					if (name.equals("burst"))
-						((FireworkEffectMeta) meta).setEffect(readBurst());
-					if (name.equals("firework"))
-						readFirework((FireworkMeta) meta);
+			while (hasNext() && peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("type")) {
+					item.setType(Material.getMaterial(nextString()));
+					meta = Bukkit.getItemFactory().getItemMeta(item.getType());
 				}
-				endObject();
+				if (name.equals("data"))
+					item.setDurability((short) nextInt());
+				if (name.equals("amount"))
+					item.setAmount(nextInt());
+				if (name.equals("enchants")) {
+					beginObject();
+					while (peek() != JsonToken.END_OBJECT)
+						if (meta instanceof EnchantmentStorageMeta)
+							((EnchantmentStorageMeta) meta).addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
+						else
+							meta.addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
+					endObject();
+				}
+				
+				if (name.equals("meta")) {
+					beginObject();
+					while (peek() != JsonToken.END_OBJECT) {
+						name = nextName();
+						if (name.equals("name"))
+							meta.setDisplayName(nextString());
+						if (name.equals("lore")) {
+							beginArray();
+							List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<String>();
+							while (peek() != JsonToken.END_ARRAY)
+								lore.add(nextString());
+							meta.setLore(lore);
+							endArray();
+						}
+						if (name.equals("color"))
+							((LeatherArmorMeta) meta).setColor(Color.fromRGB(nextInt()));
+						if (name.equals("skull"))
+							((SkullMeta) meta).setOwner(nextString());
+						if (name.equals("map"))
+							((MapMeta) meta).setScaling(nextBoolean());
+						if (name.equals("effects"))
+							for (PotionEffect effect : readEffectList())
+								((PotionMeta) meta).addCustomEffect(effect, true);
+						if (name.equals("book"))
+							readBook((BookMeta) meta);
+						if (name.equals("burst"))
+							((FireworkEffectMeta) meta).setEffect(readBurst());
+						if (name.equals("firework"))
+							readFirework((FireworkMeta) meta);
+					}
+					endObject();
+				}
 			}
+			endObject();
+			
 		}
-		endObject();
-		
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		item.setItemMeta(meta);
 		return item;
 	}
 	
-	public List<PotionEffect> readEffectList() throws IOException {
+	public List<PotionEffect> readEffectList() {
 		List<PotionEffect> effects = new ArrayList<PotionEffect>();
-		
-		beginArray();
-		while (peek() != JsonToken.END_ARRAY) {
-			beginObject();
-			PotionEffectType type = null;
-			int duration = 0, amplifier = 0;
-			while (peek() != JsonToken.END_OBJECT) {
-				String name = nextName();
-				if (name.equals("type"))
-					type = PotionEffectType.getByName(nextString());
-				if (name.equals("duration"))
-					duration = nextInt();
-				if (name.equals("amplifier"))
-					amplifier = nextInt();
+		try {
+			beginArray();
+			while (peek() != JsonToken.END_ARRAY) {
+				beginObject();
+				PotionEffectType type = null;
+				int duration = 0, amplifier = 0;
+				while (peek() != JsonToken.END_OBJECT) {
+					String name = nextName();
+					if (name.equals("type"))
+						type = PotionEffectType.getByName(nextString());
+					if (name.equals("duration"))
+						duration = nextInt();
+					if (name.equals("amplifier"))
+						amplifier = nextInt();
+				}
+				effects.add(new PotionEffect(type, duration, amplifier));
+				endObject();
 			}
-			effects.add(new PotionEffect(type, duration, amplifier));
-			endObject();
+			endArray();
 		}
-		endArray();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return effects;
 	}
 	
-	public BookMeta readBook(BookMeta book) throws IOException {
-		beginObject();
-		while (peek() != JsonToken.END_OBJECT) {
-			String name = nextName();
-			if (name.equals("title"))
-				book.setTitle(nextString());
-			if (name.equals("author"))
-				book.setAuthor(nextString());
-			if (name.equals("pages")) {
-				beginArray();
-				while (peek() != JsonToken.END_ARRAY)
-					book.addPage(nextString());
-				endArray();
+	public BookMeta readBook(BookMeta book) {
+		try {
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("title"))
+					book.setTitle(nextString());
+				if (name.equals("author"))
+					book.setAuthor(nextString());
+				if (name.equals("pages")) {
+					beginArray();
+					while (peek() != JsonToken.END_ARRAY)
+						book.addPage(nextString());
+					endArray();
+				}
 			}
+			endObject();
 		}
-		endObject();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return book;
 	}
 	
-	public BookMeta readBook() throws IOException {
+	public BookMeta readBook() {
 		return readBook((BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
 	}
 	
-	public FireworkEffect readBurst() throws IOException {
+	public FireworkEffect readBurst() {
 		FireworkEffect.Builder burst = FireworkEffect.builder();
-		
-		beginObject();
-		while (peek() != JsonToken.END_OBJECT) {
-			String name = nextName();
-			if (name.equals("type"))
-				burst.with(FireworkEffect.Type.valueOf(nextString()));
-			if (name.equals("primary")) {
-				beginArray();
-				while (peek() != JsonToken.END_ARRAY)
-					burst.withColor(Color.fromRGB(nextInt()));
-				endArray();
+		try {
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("type"))
+					burst.with(FireworkEffect.Type.valueOf(nextString()));
+				if (name.equals("primary")) {
+					beginArray();
+					while (peek() != JsonToken.END_ARRAY)
+						burst.withColor(Color.fromRGB(nextInt()));
+					endArray();
+				}
+				if (name.equals("fade")) {
+					beginArray();
+					while (peek() != JsonToken.END_ARRAY)
+						burst.withFade(Color.fromRGB(nextInt()));
+					endArray();
+				}
+				if (name.equals("flicker") && nextBoolean())
+					burst.withFlicker();
+				if (name.equals("trail") && nextBoolean())
+					burst.withTrail();
 			}
-			if (name.equals("fade")) {
-				beginArray();
-				while (peek() != JsonToken.END_ARRAY)
-					burst.withFade(Color.fromRGB(nextInt()));
-				endArray();
-			}
-			if (name.equals("flicker") && nextBoolean())
-				burst.withFlicker();
-			if (name.equals("trail") && nextBoolean())
-				burst.withTrail();
+			endObject();
 		}
-		endObject();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return burst.build();
 	}
 	
-	public FireworkMeta readFirework(FireworkMeta firework) throws IOException {
-		
-		beginObject();
-		while (peek() != JsonToken.END_OBJECT) {
-			String name = nextName();
-			if (name.equals("fuse"))
-				firework.setPower(nextInt());
-			if (name.equals("bursts")) {
-				beginArray();
-				while (peek() != JsonToken.END_ARRAY)
-					firework.addEffect(readBurst());
-				endArray();
+	public FireworkMeta readFirework(FireworkMeta firework) {
+		try {
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("fuse"))
+					firework.setPower(nextInt());
+				if (name.equals("bursts")) {
+					beginArray();
+					while (peek() != JsonToken.END_ARRAY)
+						firework.addEffect(readBurst());
+					endArray();
+				}
 			}
+			endObject();
 		}
-		endObject();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return firework;
 	}
 	
-	public FireworkMeta readFirework() throws IOException {
+	public FireworkMeta readFirework() {
 		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK));
 	}
 	
-	public Map<String,String> readMap() throws IOException {
+	public Map<String, String> readMap() {
 		Map<String, String> map = new HashMap<String, String>();
-		beginObject();
-		while(peek() != JsonToken.END_OBJECT)
-			map.put(nextName(), nextString());
-		endObject();
+		try {
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT)
+				map.put(nextName(), nextString());
+			endObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return map;
 	}
 	
-	public Location readLoc() throws IOException{
+	public Location readLoc() throws IOException {
 		Location loc = Bukkit.getWorlds().get(0).getSpawnLocation();
-		beginObject();
-		while(peek() != JsonToken.END_OBJECT){
-			String name = nextName();
-			if(name.equals("world"))
-				loc.setWorld(Bukkit.getWorld(nextString()));
-			if(name.equals("x"))
-				loc.setX(nextDouble());
-			if(name.equals("y"))
-				loc.setY(nextDouble());
-			if(name.equals("z"))
-				loc.setZ(nextDouble());
-			if(name.equals("pitch"))
-				loc.setYaw((float) nextDouble());
-			if(name.equals("yaw"))
-				loc.setPitch((float) nextDouble());
+		try {
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("world"))
+					loc.setWorld(Bukkit.getWorld(nextString()));
+				if (name.equals("x"))
+					loc.setX(nextDouble());
+				if (name.equals("y"))
+					loc.setY(nextDouble());
+				if (name.equals("z"))
+					loc.setZ(nextDouble());
+				if (name.equals("pitch"))
+					loc.setYaw((float) nextDouble());
+				if (name.equals("yaw"))
+					loc.setPitch((float) nextDouble());
+			}
+			endObject();
 		}
-		endObject();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return loc;
 	}
 	
