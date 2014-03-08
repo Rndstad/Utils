@@ -3,7 +3,10 @@ package net.amoebaman.utils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -197,6 +200,15 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	
 	public FireworkMeta readFirework() throws IOException {
 		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK));
+	}
+	
+	public Map<String,String> readMap() throws IOException {
+		Map<String, String> map = new HashMap<String, String>();
+		beginObject();
+		while(peek() != JsonToken.END_OBJECT)
+			map.put(nextName(), nextString());
+		endObject();
+		return map;
 	}
 	
 	public Location readLoc() throws IOException{
