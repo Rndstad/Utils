@@ -63,15 +63,16 @@ public class S_Loc{
 	 * After saving a location using this method, it can be loaded by using {@link #stringLoad(Location)}
 	 * 
 	 * @param loc a location
-	 * @param includeRotation whether or not to include the yaw and pitch data
+	 * @param round whether or not to snap to even coordinates
+	 * @param rotation whether or not to include the yaw and pitch data
 	 * @return a string containing the location's data
 	 */
-	public static String stringSave(Location loc, boolean includeRotation){
+	public static String stringSave(Location loc, boolean round, boolean rotation){
 		if(loc == null)
 			return null;
-		String str = loc.getWorld().getName() + "@" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
-		if(includeRotation)
-			str += "," + (int) loc.getYaw() + "," + (int) loc.getPitch();
+		String str = loc.getWorld().getName() + "@" + (round ? loc.getBlockX() + 0.5 : loc.getX()) + "," + (round ? loc.getBlockY() : loc.getY()) + "," + (round ? loc.getBlockZ() + 0.5 : loc.getZ());
+		if(rotation)
+			str += "," + (round ? Math.round(loc.getYaw() * 22.5) / 22.5 : loc.getYaw()) + "," + (round ? Math.round(loc.getPitch() * 22.5) / 22.5 : loc.getPitch());
 		return str;
 	}
 	
@@ -83,7 +84,7 @@ public class S_Loc{
 	 * @param round whether or not to automatically snap the location to block centers (usually for nice teleportation)
 	 * @return the location saved, or null if the string is improperly formatted
 	 */
-	public static Location stringLoad(String str, boolean round){
+	public static Location stringLoad(String str){
 		if(str == null)
 			return null;
 		try{
@@ -95,8 +96,6 @@ public class S_Loc{
 				toReturn.setYaw(Float.parseFloat(coords[3]));
 				toReturn.setPitch(Float.parseFloat(coords[4]));
 			}
-			if(round)
-				toReturn = toReturn.getBlock().getLocation().add(0.5, 0, 0.5);
 			return toReturn;	
 		}
 		catch(Exception e){
