@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import net.amoebaman.utils.chat.Chat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -216,8 +218,11 @@ public class CommandController implements CommandExecutor{
 		for(int i = 0; i < newArgs.length; i++)
 			newArgs[i] = args[i + (theId.length - 1)];
 		try {
-			if(theCmd.method.getReturnType().equals(String[].class))
-				sender.sendMessage((String[]) theCmd.method.invoke(theCmd.instance, sender, newArgs));
+			if(!theCmd.method.getReturnType().equals(Void.class)){
+				Object result = theCmd.method.invoke(theCmd.instance, sender, newArgs);
+				if(result != null)
+					Chat.send(sender, result);
+			}
 			else
 				theCmd.method.invoke(theCmd.instance, sender, newArgs);
 			return true;

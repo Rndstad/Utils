@@ -3,6 +3,8 @@ package net.amoebaman.utils;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.util.com.google.common.collect.Lists;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -58,12 +60,13 @@ public class ChatUtils {
 	/**
 	 * Gets the width of a character in Minecraft's default font, in font-pixels.
 	 * @param value a character
+	 * @param bold whether this character is in bold style (+1 px)
 	 * @return the width of the character
 	 */
-	private static int getCharWidth(char value){
+	private static int getCharWidth(char value, boolean bold){
 		if(IRREG_CHAR_WIDTH.containsKey(value))
-			return IRREG_CHAR_WIDTH.get(value);
-		return DEFAULT_CHAR_WIDTH;
+			return IRREG_CHAR_WIDTH.get(value) + (bold ? 1 : 0);
+		return DEFAULT_CHAR_WIDTH + (bold ? 1 : 0);
 	}
 	
 	/**
@@ -73,11 +76,19 @@ public class ChatUtils {
 	 */
 	private static int getStringWidth(String str){
 		int length = 0;
+		boolean bold = false;
 		for(int i = 0; i < str.length(); i++)
-			if(i == 0)
-				length += getCharWidth(str.charAt(i));
-			else if(str.charAt(i - 1) != ChatColor.COLOR_CHAR)
-				length += getCharWidth(str.charAt(i));
+			if(str.charAt(i) != ChatColor.COLOR_CHAR)
+				if(i == 0)
+					length += getCharWidth(str.charAt(i), bold);
+				else
+					if(str.charAt(i - 1) != ChatColor.COLOR_CHAR)
+						length += getCharWidth(str.charAt(i), bold);
+					else
+						if(str.charAt(i) == 'l')
+							bold = true;
+						else if(!Lists.newArrayList('m', 'n', 'o').contains(str.charAt(i)))
+							bold = false;
 		return length;
 	}
 	
@@ -110,7 +121,7 @@ public class ChatUtils {
 	 * @return the formatted text for center-align
 	 */
 	public static String centerAlign(String text){
-		int numSpaces = ((SCREEN_WIDTH - getStringWidth(text)) / 2) / getCharWidth(' ');
+		int numSpaces = ((SCREEN_WIDTH - getStringWidth(text)) / 2) / getCharWidth(' ', false);
 		for(int i = 0; i < numSpaces; i++)
 			text = " " + text;
 		return text;
