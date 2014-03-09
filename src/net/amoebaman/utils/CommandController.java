@@ -28,15 +28,18 @@ import com.google.common.collect.Lists;
  */
 public class CommandController implements CommandExecutor{
 	
-	private final static CommandController INSTANCE = new CommandController();
 	private final static Set<AnnotatedPluginCommand> commands = new HashSet<AnnotatedPluginCommand>();
 	
+	/*
+	 * This is necessary to ensure that developers don't try to hijack the controller and do janky shit with it
+	 */
+	private final static CommandController INSTANCE = new CommandController();
 	private CommandController(){}
 	
 	/**
-	 * Registers all command handlers in a class, matching them with their corresponding commands registered to the specified plugin.
-	 * @param plugin The plugin whose commands will be considered for registration
-	 * @param handler An instance of the class whose methods will be considered for registration
+	 * Registers all {@link @CommandHandler}{@code s} within a class with the CommandController, linking them
+	 * to their respective commands as defined by the annotation.
+	 * @param handler an instance of the class to register
 	 */
 	public static void registerCommands(Object handler){
 		for(Method method : handler.getClass().getMethods())
@@ -50,6 +53,18 @@ public class CommandController implements CommandExecutor{
 	/**
 	 * An annotation interface that may be attached to a method to designate it as a command handler.
 	 * When registering a handler with this class, only methods marked with this annotation will be considered for command registration.
+	 * CommandHandler methods have very loose signature requirements in order to promote flexibility and adaptability.
+	 * <br><br>
+	 * CommandHandler methods must have two arguments.  The first <b>must</b> be an instance of {@link CommandSender}, though it can be <i>any</i>
+	 * instance of CommandSender - if a CommandSender that can't be cast to the required form sends the command, they will automatically
+	 * be given a no-go message and the command will not be sent.
+	 * <br><br>
+	 * The second argument must be either an array of {@link String} or the varargs equivalent, which is used to pass in the arguments.
+	 * Arguments begin with the first traditional argument that is not part of the defined command string.
+	 * <br><br>
+	 * CommandHandlers <i>may return whatever they like</i> - if the method returns something besides void, it will be passed to
+	 * {@link Chat#send(CommandSender, Object...)} to be sent to the player as a message.  See the documentation for {@link Chat#send(CommandSender, Object...)}
+	 * for more information on how various objects are interpreted and sent to players.
 	 * 
 	 * @author AmoebaMan
 	 */
@@ -115,7 +130,7 @@ public class CommandController implements CommandExecutor{
 			
 			identifiers = new HashSet<String[]>();
 			if(annot.cmd().trim().isEmpty())
-				throw new IllegalArgumentException("command method must have at least one valid base command");
+				throw new IllegalArgumentException("command method must have a valid base command");
 			identifiers.add(annot.cmd().split(" "));
 			for(String alias : annot.aliases())
 				if(!alias.trim().isEmpty())
@@ -156,8 +171,8 @@ public class CommandController implements CommandExecutor{
 	}
 	
 	/**
-	 * This is the method that "officially" processes commands, but in reality it will always delegate responsibility to the handlers and methods assigned to the command or subcommand
-	 * Beyond checking permissions, checking player/console sending, and invoking handlers and methods, this method does not actually act on the commands
+	 * This is the method that "officially" processes commands, but in reality it will always delegate responsibility to the handlers and methods assigned to the command or subcommand.
+	 * Beyond checking permissions, checking player/console sending, and invoking handlers and methods, this method does not actually act on the commands.
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
 		
