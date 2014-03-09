@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 
 /**
  * This class contains utilities for working with Minecraft's chat system, to make pretty and understandable
- * text easier to code.  The {@link Scheme} enum is specifically designed so that multiple plugins can
- * use the same color scheme, which in theory can later be changed at will via a configuration.
+ * text easier to code.
  * <br><br>
  * All of the text-alignment functions are based off of Minecraft's default chat font widths.  They will most
  * likely be slightly off if you use a texture pack that changes the font.
@@ -22,27 +21,40 @@ import org.bukkit.entity.Player;
  */
 public class Chat {
 	
-	public static void send(CommandSender player, Iterable<Object> messages){
-		for(Object message : messages)
-			send(player, message);
-	}
-	
 	private static Class<?> nmsPacketPlayOutChat = ReflectionUtil.getNMSClass("PacketPlayOutChat");
 	private static Class<?> nmsChatSerializer = ReflectionUtil.getNMSClass("ChatSerializer");
+	
+	/**
+	 * Sends a message, or many messages, to the player (or console).  Various types of objects will be automatically
+	 * used in the most appropriate way possible, in order to make this method as dynamic and universally applicable
+	 * as possible.
+	 * <br><br>
+	 * {@link Iterable}{@code s} and arrays will be automatically iterated over, calling this same method for each element
+	 * within them.  This check is recursive - if the contents of the iterable or array are more iterables or arrays, they
+	 * will be iterated over as well.
+	 * <br><br>
+	 * {@link JsonMessage}{@code s} will be parsed out to their JSON plaintext and be sent to the player using the proper
+	 * reflection packet sending to ensure the message is fully displayed.
+	 * <br><br>
+	 * Any other {@link Object}{@code s} will be displayed to the player using {@link String#valueOf(Object)}.  For {@link
+	 * String}{@code s} and {@link Message}{@code s}, this automatically restores them to String form.
+	 * 
+	 * @param player the recipient
+	 * @param messages some messages
+	 */
 	public static void send(CommandSender player, Object... messages){
 		for(Object message : messages)
 			if(message instanceof Iterable)
 				for(Object each : (Iterable) message)
 					send(player, each);
 			else if(message instanceof Object[])
-				for(Object each : (Iterable) message)
+				for(Object each : (Object[]) message)
 					send(player, each);
 			else if(message instanceof JsonMessage)
 				if(player instanceof Player){
 					try {
 						Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(player).getClass(), "playerConnection").get(ReflectionUtil.getHandle(player));
-						Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(
-								ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, ChatColor.translateAlternateColorCodes('&', message.toString())));
+						Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, ChatColor.translateAlternateColorCodes('&', message.toString())));
 						ReflectionUtil.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
 					}
 					catch (Exception e) {
@@ -50,11 +62,15 @@ public class Chat {
 					}
 				}
 				else
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', ((JsonMessage) message).getText()));
+					player.sendMessage(format(((JsonMessage) message).getText()));
 			else
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "" + message));
+				player.sendMessage(format(String.valueOf(message)));
 	}
 	
+	/**
+	 * Sends a message, or many messages to all players on the server and the console.  See {@link Chat#send(CommandSender, Object...)}
+	 * @param messages some messages
+	 */
 	public static void broadcast(Object... messages){
 		for(Player player : Bukkit.getOnlinePlayers())
 			send(player, messages);
@@ -118,6 +134,31 @@ public class Chat {
 		case YELLOW: return ChatColor.YELLOW;
 		default: return ChatColor.RESET;
 		}
+	}
+	
+	/**
+	 * Abbreviated method for translating alternate color codes, with the typical standard
+	 * of the ampersand (&) filling in for the section character.
+	 * 
+	 * @param str a string
+	 * @return the color formatted string
+	 */
+	public static String format(String str){
+		return ChatColor.translateAlternateColorCodes('&', str);
+	}
+	
+	/**
+	 * Quickie method for formatting a string according to a color scheme, using Minecraft's
+	 * built-in color code formation.  "&x" is replaced by the scheme's normal format, "&y" is
+	 * replaced by the scheme's alternate format, and "&z" is replaced by the scheme's strong
+	 * format.
+	 * 
+	 * @param str a string
+	 * @param scheme a color scheme
+	 * @return the formatted string
+	 */
+	public static String format(String str, Scheme scheme){
+		return scheme.prefix + format(str).replace("&x", scheme.normal.toString()).replace("&y", scheme.alternate.toString()).replace("&z", scheme.strong.toString()) + scheme.suffix;
 	}
 	
 }

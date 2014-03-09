@@ -14,17 +14,16 @@ import org.bukkit.entity.Player;
  */
 public class Message {
 	
-	protected List<MessagePart> messageParts;
+	protected List<MessagePart> messageParts = new ArrayList<MessagePart>();
 	protected Scheme scheme;
-	protected String text;
-	protected boolean dirty;
+	protected String text = "";
+	protected boolean written = false;
 	
 	/**
 	 * Begins a JsonMessage.
 	 * @param first a color scheme
 	 */
 	public Message(Scheme scheme) {
-		messageParts = new ArrayList<MessagePart>();
 		this.scheme = scheme;
 	}
 	
@@ -53,7 +52,7 @@ public class Message {
 	 * Sets the formatting for the latest bit to the alternate format of the scheme.
 	 * @return the message (for chaining)
 	 */
-	public Message alternate(){
+	public Message alt(){
 		if(scheme != null)
 			format(scheme.alternate);
 		return this;
@@ -79,7 +78,7 @@ public class Message {
 		if (color != null && !color.isColor())
 			return this;
 		latest().color = color;
-		dirty = true;
+		written = false;
 		return this;
 	}
 	
@@ -95,7 +94,7 @@ public class Message {
 			if (style == null || !style.isFormat())
 				return this;
 		latest().styles = styles;
-		dirty = true;
+		written = false;
 		return this;
 	}
 	
@@ -106,8 +105,8 @@ public class Message {
 	 */
 	public Message format(Format format){
 		if(format != null){
-			color(format.getColor());
-			style(format.getStyles().toArray(new ChatColor[0]));
+			color(format.color());
+			style(format.styles());
 		}
 		return this;
 	}
@@ -117,7 +116,7 @@ public class Message {
 	 * @return the message in full text
 	 */
 	public String getText(){
-		if(!dirty && text != null)
+		if(written && text != null)
 			return text;
 		
 		String str = "";
@@ -134,8 +133,11 @@ public class Message {
 		if(scheme != null)
 			str += scheme.suffix;
 		
-		dirty = false;
-		return str;
+		text = str;
+		if(scheme != null)
+			text = scheme.prefix + text + scheme.suffix;
+		written = true;
+		return text;
 	}
 	
 	public String toString(){ return getText(); }
@@ -144,11 +146,17 @@ public class Message {
 		return messageParts.get(messageParts.size() - 1);
 	}
 	
+	/**
+	 * A class that represents a piece of a {@link Message}, including
+	 * both its text and its format
+	 * 
+	 * @author AmoebaMan
+	 */
 	public static class MessagePart {
 		protected ChatColor color = ChatColor.RESET;
 		protected ChatColor[] styles = new ChatColor[0];
 		protected String text;
-		MessagePart(String text) { this.text = text; }
+		protected MessagePart(String text) { this.text = text; }
 	}
 	
 }

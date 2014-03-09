@@ -58,7 +58,7 @@ public class Scheme{
 	
 	/**
 	 * Construct a ColorScheme for later use (this will NOT be stored automatically).
-	 * @param normal the normal chat color and styles
+	 * @param normal the normal and alternate chat color and styles
 	 * @param strong the emphasis chat color and styles
 	 * @param prefix the prefix for messages in this scheme
 	 * @param suffix the suffix for messages in this scheme

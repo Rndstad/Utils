@@ -20,9 +20,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public class JsonMessage extends Message{
 	
-	protected String jsonText;
-	protected boolean jsonDirty;
-	
 	private Class<?> nmsTagCompound = ReflectionUtil.getNMSClass("NBTTagCompound");
 	private Class<?> nmsAchievement = ReflectionUtil.getNMSClass("Achievement");
 	private Class<?> nmsStatistic = ReflectionUtil.getNMSClass("Statistic");
@@ -31,11 +28,10 @@ public class JsonMessage extends Message{
 	private Class<?> obcStatistic = ReflectionUtil.getOBCClass("CraftStatistic");
 	private Class<?> obcItemStack = ReflectionUtil.getOBCClass("inventory.CraftItemStack");
 	
-	public JsonMessage(Scheme scheme) {
-		super(scheme);
-		jsonText = null;
-		dirty = false;
-	}
+	protected String jsonText = "";
+	protected boolean jsonWritten = false;
+	
+	public JsonMessage(Scheme scheme) { super(scheme); }
 	
 	public JsonMessage then(Object text) {
 		messageParts.add(new JsonMessagePart(text.toString()));
@@ -44,11 +40,11 @@ public class JsonMessage extends Message{
 		return this;
 	}
 	
-	public JsonMessage alternate(){ return (JsonMessage) super.alternate(); }
+	public JsonMessage alt(){ return (JsonMessage) super.alt(); }
 	public JsonMessage strong(){ return (JsonMessage) super.strong(); }
 	public JsonMessage format(Format format){ return (JsonMessage) super.format(format); }
-	public JsonMessage color(ChatColor color) { jsonDirty = true; return (JsonMessage) super.color(color); }
-	public JsonMessage style(ChatColor... styles) { jsonDirty = true; return (JsonMessage) super.style(styles); }
+	public JsonMessage color(ChatColor color) { return (JsonMessage) super.color(color); }
+	public JsonMessage style(ChatColor... styles) { return (JsonMessage) super.style(styles); }
 
 	/**
 	 * Sets the file path that will be opened when this bit
@@ -218,8 +214,10 @@ public class JsonMessage extends Message{
 	 * @return the json translation
 	 */
 	public String toString() {
-		if (!jsonDirty && jsonText != null)
+		if (written && jsonWritten && jsonText != null)
 			return jsonText;
+		
+		getText();
 		
 		JsonWriter json = new JsonWriter();
 		try {
@@ -243,8 +241,7 @@ public class JsonMessage extends Message{
 		jsonText = json.toString();
 		if(scheme != null)
 			jsonText = scheme.prefix + jsonText + scheme.suffix;
-		
-		jsonDirty = false;
+		jsonWritten = true;
 		return jsonText;
 	}
 	
@@ -286,21 +283,21 @@ public class JsonMessage extends Message{
 	private void onClick(String name, String data) {
 		latest().clickActionName = name;
 		latest().clickActionData = data;
-		jsonDirty = true;
+		jsonWritten = false;
 	}
 	
 	private void onHover(String name, String data) {
 		latest().hoverActionName = name;
 		latest().hoverActionData = data;
-		jsonDirty = true;
+		jsonWritten = false;
 	}
 	
 	public static class JsonMessagePart extends MessagePart {
 
 		protected String clickActionName = null, clickActionData = null, hoverActionName = null, hoverActionData = null;
-		JsonMessagePart(String text) { super(text); }
+		protected JsonMessagePart(String text) { super(text); }
 		
-		JsonWriter writeJson(JsonWriter json) {
+		protected JsonWriter writeJson(JsonWriter json) {
 			try {
 				json.beginObject();
 				json.name("text").value(text);
