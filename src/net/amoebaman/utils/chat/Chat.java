@@ -58,6 +58,7 @@ public class Chat {
 	public static void broadcast(Object... messages){
 		for(Player player : Bukkit.getOnlinePlayers())
 			send(player, messages);
+		send(Bukkit.getConsoleSender(), messages);
 	}
 	
 	/**
