@@ -284,28 +284,28 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	}
 	
 	public Attribute readAttribute(){
-		Attribute.Builder attrb = Attribute.newBuilder();
+		Attribute attrb = new Attribute();
 		try{
 			beginObject();
 			while (peek() != JsonToken.END_OBJECT) {
 				String name = nextName();
 				if(name.equals("uuid"))
-					attrb.uuid(UUID.fromString(nextString()));
+					attrb.uuid = UUID.fromString(nextString());
 				if(name.equals("name"))
-					attrb.name(nextString());
+					attrb.name = nextString();
 				if(name.equals("attrb"))
-					attrb.type(new AttributeType(nextString()).register());
+					attrb.type = AttributeType.fromId(nextString());
 				if(name.equals("op"))
-					attrb.operation(Operation.valueOf(nextString()));
+					attrb.op = Operation.valueOf(nextString());
 				if(name.equals("value"))
-					attrb.amount(nextDouble());
+					attrb.value = nextDouble();
 			}
 			endObject();
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return attrb.build();
+		return attrb;
 	}
 	
 }
