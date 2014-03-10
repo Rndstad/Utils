@@ -1,6 +1,5 @@
 package net.amoebaman.utils;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +21,9 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
+
+import net.amoebaman.utils.nms.Attributes;
+import net.amoebaman.utils.nms.Attributes.Attribute;
 
 /**
  * Extension of the Google libs JsonWriter included in CraftBukkit. It contains
@@ -121,6 +123,15 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 					name("firework").writeFirework((FireworkMeta) meta);
 				endObject();
 			}
+			
+			Attributes attrbs = new Attributes(item);
+			if(attrbs.size() > 0){
+				name("attributes").beginArray();
+				for(Attribute attrb : attrbs.values())
+					writeAttribute(attrb);
+				endArray();
+			}
+			
 		}
 		endObject();
 		return this;
@@ -128,74 +139,97 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	
 	public JsonWriter writeEffectList(List<PotionEffect> effects) {
 		beginArray();
-		for (PotionEffect effect : effects) {
-			beginObject();
-			name("type").value(effect.getType().getName());
-			name("duration").value(effect.getDuration());
-			name("amplifier").value(effect.getAmplifier());
-			endObject();
-		}
+		if(effects != null)
+			for (PotionEffect effect : effects) {
+				beginObject();
+				name("type").value(effect.getType().getName());
+				name("duration").value(effect.getDuration());
+				name("amplifier").value(effect.getAmplifier());
+				endObject();
+			}
 		endArray();
 		return this;
 	}
 	
 	public JsonWriter writeBook(BookMeta book) {
 		beginObject();
-		name("title").value(book.getTitle());
-		name("author").value(book.getAuthor());
-		name("pages").beginArray();
-		for (String page : book.getPages())
-			value(page);
-		endArray();
+		if(book != null){
+			name("title").value(book.getTitle());
+			name("author").value(book.getAuthor());
+			name("pages").beginArray();
+			for (String page : book.getPages())
+				value(page);
+			endArray();
+		}
 		endObject();
 		return this;
 	}
 	
 	public JsonWriter writeBurst(FireworkEffect burst) {
 		beginObject();
-		name("type").value(burst.getType().name());
-		name("primary").beginArray();
-		for (Color color : burst.getColors())
-			value(color.asRGB());
-		endArray();
-		name("fade").beginArray();
-		for (Color color : burst.getFadeColors())
-			value(color.asRGB());
-		endArray();
-		name("flicker").value(burst.hasFlicker());
-		name("trail").value(burst.hasTrail());
+		if(burst != null){
+			name("type").value(burst.getType().name());
+			name("primary").beginArray();
+			for (Color color : burst.getColors())
+				value(color.asRGB());
+			endArray();
+			name("fade").beginArray();
+			for (Color color : burst.getFadeColors())
+				value(color.asRGB());
+			endArray();
+			name("flicker").value(burst.hasFlicker());
+			name("trail").value(burst.hasTrail());
+		}
 		endObject();
 		return this;
 	}
 	
 	public JsonWriter writeFirework(FireworkMeta firework) {
 		beginObject();
-		name("fuse").value(firework.getPower());
-		name("bursts").beginArray();
-		for (FireworkEffect burst : firework.getEffects())
-			writeBurst(burst);
-		endArray();
+		if(firework != null){
+			name("fuse").value(firework.getPower());
+			name("bursts").beginArray();
+			for (FireworkEffect burst : firework.getEffects())
+				writeBurst(burst);
+			endArray();
+		}
 		endObject();
 		return this;
 	}
 	
 	public JsonWriter writeMap(Map<String, String> map) {
 		beginObject();
-		for (Entry<String, String> entry : map.entrySet())
-			name(entry.getKey()).value(entry.getValue());
+		if(map != null)
+			for (Entry<String, String> entry : map.entrySet())
+				name(entry.getKey()).value(entry.getValue());
 		endObject();
 		return this;
 	}
 	
-	public JsonWriter writeLoc(Location loc, boolean round, boolean rotation) throws IOException {
+	public JsonWriter writeLoc(Location loc, boolean round, boolean rotation){
 		beginObject();
-		name("world").value(loc.getWorld().getName());
-		name("x").value(round ? loc.getBlockX() + 0.5 : loc.getX());
-		name("y").value(round ? loc.getBlockY() : loc.getY());
-		name("z").value(round ? loc.getBlockZ() + 0.5 : loc.getZ());
-		if (rotation) {
-			name("pitch").value(round ? Math.round(loc.getPitch() * 22.5) / 22.5 : loc.getPitch());
-			name("yaw").value(round ? Math.round(loc.getYaw() * 22.5) / 22.5 : loc.getYaw());
+		if(loc != null){
+			name("world").value(loc.getWorld().getName());
+			name("x").value(round ? loc.getBlockX() + 0.5 : loc.getX());
+			name("y").value(round ? loc.getBlockY() : loc.getY());
+			name("z").value(round ? loc.getBlockZ() + 0.5 : loc.getZ());
+			if (rotation) {
+				name("pitch").value(round ? Math.round(loc.getPitch() * 22.5) / 22.5 : loc.getPitch());
+				name("yaw").value(round ? Math.round(loc.getYaw() * 22.5) / 22.5 : loc.getYaw());
+			}
+		}
+		endObject();
+		return this;
+	}
+	
+	public JsonWriter writeAttribute(Attribute attrb){
+		beginObject();
+		if(attrb != null){
+			name("uuid").value(attrb.getUUID().toString());
+			name("name").value(attrb.getName());
+			name("attrb").value(attrb.getAttributeType().getMinecraftId());
+			name("op").value(attrb.getOperation().name());
+			name("value").value(attrb.getAmount());
 		}
 		endObject();
 		return this;

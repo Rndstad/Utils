@@ -1,11 +1,7 @@
 package net.amoebaman.utils;
 
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -18,6 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import net.amoebaman.utils.nms.*;
+import net.amoebaman.utils.nms.Attributes.Attribute;
+import net.amoebaman.utils.nms.Attributes.AttributeType;
+import net.amoebaman.utils.nms.Attributes.Operation;
 
 public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader {
 	
@@ -42,32 +43,32 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	public ItemStack readItem() {
 		
 		ItemStack item = new ItemStack(Material.AIR);
-		ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
 		try {
 			beginObject();
 			
 			while (hasNext() && peek() != JsonToken.END_OBJECT) {
 				String name = nextName();
-				if (name.equals("type")) {
+				if (name.equals("type"))
 					item.setType(Material.getMaterial(nextString()));
-					meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-				}
 				if (name.equals("data"))
 					item.setDurability((short) nextInt());
 				if (name.equals("amount"))
 					item.setAmount(nextInt());
 				if (name.equals("enchants")) {
 					beginObject();
+					ItemMeta meta = item.getItemMeta();
 					while (peek() != JsonToken.END_OBJECT)
 						if (meta instanceof EnchantmentStorageMeta)
 							((EnchantmentStorageMeta) meta).addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
 						else
 							meta.addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
+					item.setItemMeta(meta);
 					endObject();
 				}
 				
 				if (name.equals("meta")) {
 					beginObject();
+					ItemMeta meta = item.getItemMeta();
 					while (peek() != JsonToken.END_OBJECT) {
 						name = nextName();
 						if (name.equals("name"))
@@ -96,7 +97,17 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 						if (name.equals("firework"))
 							readFirework((FireworkMeta) meta);
 					}
+					item.setItemMeta(meta);
 					endObject();
+				}
+				
+				if(name.equals("attributes")){
+					beginArray();
+					Attributes attrbs = new Attributes(item);
+					while(peek() != JsonToken.END_ARRAY)
+						attrbs.add(readAttribute());
+					item = attrbs.apply(item);
+					endArray();
 				}
 			}
 			endObject();
@@ -105,7 +116,6 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		item.setItemMeta(meta);
 		return item;
 	}
 	
@@ -197,7 +207,12 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 			e.printStackTrace();
 		}
 		
-		return burst.build();
+		try{
+			return burst.build();
+		}
+		catch(Exception e){
+			return null;
+		}
 	}
 	
 	public FireworkMeta readFirework(FireworkMeta firework) {
@@ -241,7 +256,7 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return map;
 	}
 	
-	public Location readLoc() throws IOException {
+	public Location readLoc(){
 		Location loc = Bukkit.getWorlds().get(0).getSpawnLocation();
 		try {
 			beginObject();
@@ -266,6 +281,31 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 			e.printStackTrace();
 		}
 		return loc;
+	}
+	
+	public Attribute readAttribute(){
+		Attribute.Builder attrb = Attribute.newBuilder();
+		try{
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if(name.equals("uuid"))
+					attrb.uuid(UUID.fromString(nextString()));
+				if(name.equals("name"))
+					attrb.name(nextString());
+				if(name.equals("attrb"))
+					attrb.type(new AttributeType(nextString()).register());
+				if(name.equals("op"))
+					attrb.operation(Operation.valueOf(nextString()));
+				if(name.equals("value"))
+					attrb.amount(nextDouble());
+			}
+			endObject();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return attrb.build();
 	}
 	
 }
