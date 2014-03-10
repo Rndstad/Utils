@@ -17,6 +17,8 @@ import net.amoebaman.utils.nms.Attributes.Operation;
  */
 public class AttributeStorage {
 	
+	public static final UUID HEROCRAFT_SKELETON_KEY = UUID.fromString("efaf55e0-a7ed-11e3-a5e2-0800200c9a66");
+	
     private ItemStack target;
     private final UUID uniqueKey;
     
