@@ -160,7 +160,7 @@ public class Chat {
 		List<Object> list = new ArrayList<Object>();
 		for(Object object : objects)
 			if(object instanceof Iterable)
-				for(Object each : (Iterable) object)
+				for(Object each : (Iterable<Object>) object)
 					list.add(each);
 			else if(object instanceof Object[])
 				for(Object each : (Object[]) object)
