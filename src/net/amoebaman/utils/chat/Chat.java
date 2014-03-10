@@ -1,5 +1,6 @@
 package net.amoebaman.utils.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.amoebaman.utils.nms.ReflectionUtil;
@@ -43,14 +44,8 @@ public class Chat {
 	 * @param messages some messages
 	 */
 	public static void send(CommandSender player, Object... messages){
-		for(Object message : messages)
-			if(message instanceof Iterable)
-				for(Object each : (Iterable) message)
-					send(player, each);
-			else if(message instanceof Object[])
-				for(Object each : (Object[]) message)
-					send(player, each);
-			else if(message instanceof JsonMessage)
+		for(Object message : expand(messages))
+			if(message instanceof JsonMessage)
 				if(player instanceof Player){
 					try {
 						Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(player).getClass(), "playerConnection").get(ReflectionUtil.getHandle(player));
@@ -143,8 +138,8 @@ public class Chat {
 	 * @param str a string
 	 * @return the color formatted string
 	 */
-	public static String format(String str){
-		return ChatColor.translateAlternateColorCodes('&', str);
+	public static String format(Object obj){
+		return ChatColor.translateAlternateColorCodes('&', String.valueOf(obj));
 	}
 	
 	/**
@@ -157,8 +152,22 @@ public class Chat {
 	 * @param scheme a color scheme
 	 * @return the formatted string
 	 */
-	public static String format(String str, Scheme scheme){
-		return scheme.prefix + format(str).replace("&x", scheme.normal.toString()).replace("&y", scheme.alternate.toString()).replace("&z", scheme.strong.toString()) + scheme.suffix;
+	public static String format(Object obj, Scheme scheme){
+		return scheme.prefix + format(obj).replace("&x", scheme.normal.toString()).replace("&y", scheme.alternate.toString()).replace("&z", scheme.strong.toString()) + scheme.suffix;
+	}
+	
+	public static List<Object> expand(Object... objects){
+		List<Object> list = new ArrayList<Object>();
+		for(Object object : objects)
+			if(object instanceof Iterable)
+				for(Object each : (Iterable) object)
+					list.add(each);
+			else if(object instanceof Object[])
+				for(Object each : (Object[]) object)
+					list.add(each);
+			else
+				list.add(object);
+		return list;
 	}
 	
 }

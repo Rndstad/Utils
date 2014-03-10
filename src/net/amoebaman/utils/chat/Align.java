@@ -1,5 +1,6 @@
 package net.amoebaman.utils.chat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,50 +113,55 @@ public class Align{
 		String line = "";
 		for(int i = 0; i < iterations; i++)
 			line += pattern;
-		return center(line, "");
+		return (String) center(line);
 	}
 	
-	/**
-	 * Adds spaces the the beginning of a line of text to make it display as closely as possible to the center of chat box.
-	 * @param text some text
-	 * @param border a small pattern to border the edges of the chat box
-	 * @return the formatted text for center-align
-	 */
-	public static String center(String text, String border){
-		text = text.trim();
-		int width = getStringWidth(text) + (getStringWidth(border) * 2);
-		int numSpaces = (SCREEN_WIDTH - width) / getCharWidth(' ', false);
-		for(int i = 0; i < numSpaces / 2; i++)
-			text = " " + text;
-		for(int i = numSpaces / 2; i < numSpaces; i++)
-			text = text + " ";
-		return border + text + border;
+	public static Object center(Object... objects){
+		List<Object> list = Chat.expand(objects);
+		if(list.isEmpty())
+			return null;
+		if(list.size() == 1)
+			if(list.get(0) instanceof Message){
+				Message message = (Message) list.get(0);
+				int numSpaces = (SCREEN_WIDTH - getStringWidth(message.getText())) / getCharWidth(' ', false);
+				String spaces = "";
+				for(int i = 0; i < numSpaces; i++)
+					spaces += " ";
+				message.messageParts.add(0, new MessagePart(spaces));
+				message.messageParts.add(new MessagePart(spaces));
+				return message;
+			}
+			else{
+				String text = String.valueOf(list.get(0));
+				text = text.trim();
+				int numSpaces = (SCREEN_WIDTH - getStringWidth(text)) / getCharWidth(' ', false);
+				for(int i = 0; i < numSpaces / 2; i++)
+					text = " " + text;
+				for(int i = numSpaces / 2; i < numSpaces; i++)
+					text = text + " ";
+				return text;
+			}
+		else{
+			List<Object> result = new ArrayList<Object>();
+			for(Object each : list)
+				result.add(center(each));
+			return result;
+		}
 	}
 	
-	public static Message center(Message message, String border){
-		if(border == null)
-			border = "";
-		int width = getStringWidth(message.getText()) + (getStringWidth(border) * 2);
-		int numSpaces = (SCREEN_WIDTH - width) / getCharWidth(' ', false);
-		String spaces = "";
-		for(int i = 0; i < numSpaces; i++)
-			spaces += " ";
-		message.messageParts.add(0, new MessagePart(border + spaces));
-		message.messageParts.add(new MessagePart(spaces + border));
-		return message;
-	}
-	
-	public static List<String> box(List<String> text, String border){
-		text = Lists.newArrayList(text);
-		for(int i = 0; i < text.size(); i++)
-			text.set(i, center(text.get(i), border));
-		text.add(0, center("", border));
+	public static List<Object> addSpacers(String border, Object... objects){
+		List<Object> list = Chat.expand(objects);
+		list.add(0, spacerLine());
 		if(border != null && !border.isEmpty())
-			text.add(0, fillerLine(border));
-		text.add(center("", border));
+			list.add(0, fillerLine(border));
+		list.add(spacerLine());
 		if(border != null && !border.isEmpty())
-			text.add(fillerLine(border));
-		return text;
+			list.add(fillerLine(border));
+		return list;
+	}
+	
+	public static List<Object> spaceAndCenter(String border, Object... objects){
+		return addSpacers(border, center(objects));
 	}
 	
 }
