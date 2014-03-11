@@ -225,11 +225,11 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	public JsonWriter writeAttribute(Attribute attrb){
 		beginObject();
 		if(attrb != null){
-			name("uuid").value(attrb.getUUID().toString());
-			name("name").value(attrb.getName());
-			name("attrb").value(attrb.getAttributeType().getMinecraftId());
-			name("op").value(attrb.getOperation().name());
-			name("value").value(attrb.getAmount());
+			name("uuid").value(attrb.uuid.toString());
+			name("name").value(attrb.name);
+			name("attrb").value(attrb.type.identifier);
+			name("op").value(attrb.op.name());
+			name("value").value(attrb.value);
 		}
 		endObject();
 		return this;
