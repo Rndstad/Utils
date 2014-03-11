@@ -106,7 +106,7 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 					Attributes attrbs = new Attributes(item);
 					while(peek() != JsonToken.END_ARRAY)
 						attrbs.add(readAttribute());
-					item = attrbs.apply(item);
+					item = attrbs.getStack();
 					endArray();
 				}
 			}
