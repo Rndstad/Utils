@@ -6,6 +6,12 @@ import org.bukkit.inventory.ItemStack;
 
 import net.amoebaman.utils.nms.Attributes.Attribute;
 
+/**
+ * A class that eases the manipulation of item attributes to attach
+ * persistent data to items, for plugin use.
+ * 
+ * @author AmoebaMan
+ */
 public class AttributeStorage {
 	
 	private ItemStack stack;
@@ -47,7 +53,7 @@ public class AttributeStorage {
 	}
 	
 	private Attribute getAttribute(Attributes attrbs, UUID id) {
-		for(Attribute attrb : attrbs.values())
+		for(Attribute attrb : attrbs.getAttributes())
 			if(attrb.uuid.equals(id))
 				return attrb;
 		return null;

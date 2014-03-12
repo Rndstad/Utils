@@ -124,10 +124,10 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 				endObject();
 			}
 			
-			Attributes attrbs = new Attributes(item);
+			List<Attribute> attrbs = new Attributes(item).getAttributes();
 			if(attrbs.size() > 0){
 				name("attributes").beginArray();
-				for(Attribute attrb : attrbs.values())
+				for(Attribute attrb : attrbs)
 					writeAttribute(attrb);
 				endArray();
 			}

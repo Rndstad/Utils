@@ -40,6 +40,11 @@ import com.google.common.io.InputSupplier;
 import com.google.common.io.OutputSupplier;
 import com.google.common.primitives.Primitives;
 
+/**
+ * Class for safely handling NBT compounds and tags.
+ * 
+ * @author Kristian
+ */
 public class NbtFactory {
 	
 	// Convert between NBT id and the equivalent class in java
