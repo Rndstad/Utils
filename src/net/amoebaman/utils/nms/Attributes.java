@@ -174,6 +174,12 @@ public class Attributes{
 		NbtCompound nbt = NbtFactory.fromItemTag(this.stack);
 		attributes = nbt.getList("AttributeModifiers", true);
 	}
+	
+	private void updateNbt(){
+		NbtCompound nbt = NbtFactory.fromItemTag(stack);
+		nbt.put("AttributeModifiers", attributes);
+		NbtFactory.setItemTag(stack, nbt);
+	}
 
 	/**
 	 * Retrieves the {@link ItemStack} whose attributes are being altered by
@@ -181,9 +187,7 @@ public class Attributes{
 	 * @return the item
 	 */
 	public ItemStack getStack(){
-		NbtCompound nbt = NbtFactory.fromItemTag(stack);
-		nbt.put("AttributeModifiers", attributes);
-		NbtFactory.setItemTag(stack, nbt);
+		updateNbt();
 		return stack;
 	}
 	
@@ -205,15 +209,7 @@ public class Attributes{
 	 */
 	public void add(Attribute attrb){
 		attributes.add(attrb.getNbt());
-	}
-	
-	/**
-	 * Updates the value of an attribute.  Equality is checked by attribute UUID.
-	 * @param attrb an attribute
-	 */
-	public void update(Attribute attrb){
-		remove(attrb);
-		add(attrb);
+		updateNbt();
 	}
 	
 	/**
@@ -225,6 +221,17 @@ public class Attributes{
 		for(Iterator<Attribute> it = getAttributes().iterator(); it.hasNext();)
 			if(it.next().uuid.equals(attrb.uuid))
 				it.remove();
+		updateNbt();
+	}
+	
+	/**
+	 * Updates the value of an attribute.  Equality is checked by attribute UUID.
+	 * @param attrb an attribute
+	 */
+	public void update(Attribute attrb){
+		remove(attrb);
+		add(attrb);
+		//Updating NBT would be redundant, since both remove and add already did it
 	}
 	
 	/**
@@ -232,6 +239,19 @@ public class Attributes{
 	 */
 	public void clear(){
 		attributes.clear();
+		updateNbt();
+	}
+	
+	/**
+	 * Gets an attribute by its UUID.
+	 * @param id a UUID
+	 * @return the attribute with a matching UUID, or null if none was found
+	 */
+	public Attribute getAttribute(UUID id) {
+		for(Attribute attrb : getAttributes())
+			if(attrb.uuid.equals(id))
+				return attrb;
+		return null;
 	}
 	
 }

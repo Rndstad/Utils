@@ -22,7 +22,7 @@ public class AttributeStorage {
 	
 	public static void setData(ItemStack item, UUID uuid, String data){
 		Attributes attrbs = new Attributes(item);
-		Attribute attrb = getAttribute(attrbs, uuid);
+		Attribute attrb = attrbs.getAttribute(uuid);
 		
 		if(attrb == null){
 			attrb = new Attribute();
@@ -37,15 +37,8 @@ public class AttributeStorage {
 	}
 	
 	public static String getData(ItemStack item, UUID uuid){
-		Attribute attrb = getAttribute(new Attributes(item), uuid);
+		Attribute attrb = new Attributes(item).getAttribute(uuid);
 		return attrb != null ? attrb.name : null;
-	}
-	
-	private static Attribute getAttribute(Attributes attrbs, UUID id) {
-		for(Attribute attrb : attrbs.getAttributes())
-			if(attrb.uuid.equals(id))
-				return attrb;
-		return null;
 	}
 	
 }
