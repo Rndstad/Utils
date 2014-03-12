@@ -8,55 +8,62 @@ import net.amoebaman.utils.nms.Attributes.Attribute;
 
 /**
  * A class that eases the manipulation of item attributes to attach
- * persistent data to items, for plugin use.
+ * persistent data to items, for plugin use.  Data stored in this
+ * manner is keyed by {@link UUID}.
  * 
  * @author AmoebaMan
  */
 public class AttributeStorage {
 	
-	private ItemStack stack;
-	private final UUID uuid;
-	
-	private AttributeStorage(ItemStack stack, UUID uuid) {
-		if(stack == null || uuid == null)
-			throw new IllegalStateException("item and uuid cannot be null");
-		this.stack = stack;
-		this.uuid = uuid;
+	/**
+	 * Adds a data string to an {@link ItemStack}, and gives back the
+	 * UUID that it's been stored under.
+	 * 
+	 * @param item an item
+	 * @param data a data string
+	 * @return the UUID that can be used to retrieve the data later
+	 */
+	public static UUID addData(ItemStack item, String data){
+		UUID id = UUID.randomUUID();
+		setData(item, id, data);
+		return id;
 	}
 	
-	public static AttributeStorage getStorage(ItemStack stack, UUID uuid) {
-		return new AttributeStorage(stack, uuid);
-	}
-	
-	public String getData() {
-		Attribute current = getAttribute(new Attributes(stack), uuid);
-		return current != null ? current.name : null;
-	}
-	
-	public void setData(String data) {
-		Attributes attributes = new Attributes(stack);
-		Attribute current = getAttribute(attributes, uuid);
+	/**
+	 * Sets the data string to an {@link ItemStack} under an already-known
+	 * UUID.
+	 * 
+	 * @param item an item
+	 * @param uuid the UUID for the data
+	 * @param data a data string
+	 */
+	public static void setData(ItemStack item, UUID uuid, String data){
+		Attributes attrbs = new Attributes(item);
+		Attribute attrb = attrbs.getAttribute(uuid);
 		
-		if(current == null) {
-			Attribute attrb = new Attribute();
+		if(attrb == null){
+			attrb = new Attribute();
 			attrb.uuid = uuid;
 			attrb.name = data;
-			attributes.add(attrb);
+			attrbs.add(attrb);
 		}
-		else
-			current.name = data;
-		this.stack = attributes.getStack();
+		else{
+			attrb.name = data;
+			attrbs.update(attrb);
+		}
 	}
 	
-	public ItemStack getTarget() {
-		return stack;
-	}
-	
-	private Attribute getAttribute(Attributes attrbs, UUID id) {
-		for(Attribute attrb : attrbs.getAttributes())
-			if(attrb.uuid.equals(id))
-				return attrb;
-		return null;
+	/**
+	 * Gets a data string from an {@link ItemStack} using the UUID that was
+	 * used to store it.
+	 * 
+	 * @param item an item
+	 * @param uuid a UUID
+	 * @return the data stored on the item using the UUID, or null if none was found
+	 */
+	public static String getData(ItemStack item, UUID uuid){
+		Attribute attrb = new Attributes(item).getAttribute(uuid);
+		return attrb != null ? attrb.name : null;
 	}
 	
 }
