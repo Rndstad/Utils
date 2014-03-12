@@ -112,5 +112,39 @@ public class GenUtil{
 		}
 		return str + suffix;
 	}
+
+	/**
+     * Packages all arguments into a list, recursively unpacking iterables and
+     * arrays.
+     * <p>
+     * Specifically, this method iterates through all the arguments. If they are
+     * iterable containers or arrays, it will add all their elements to the
+     * returned list, otherwise, it will add the object itself to the returned
+     * list.
+     * <p>
+     * Generally, this method takes a whole junk load of objects, and returns a
+     * single-depth list containing all the elements present, with any arrays
+     * and containers unpacked.
+     * <p>
+     * This method guarantees that no elements returned will be arrays or
+     * containers.
+     * 
+     * @param objects a bunch of objects
+     * @return a single-depth list containing all the arguments
+     */
+    public static List<Object> expand(Object... objects){
+    	List<Object> list = new ArrayList<Object>();
+    	for(Object object : objects)
+    		if(object instanceof Iterable)
+    			for(Object each : (Iterable<Object>) object)
+    				list.addAll(expand(each));
+    		else
+    			if(object instanceof Object[])
+    				for(Object each : (Object[]) object)
+    					list.addAll(expand(each));
+    			else
+    				list.add(object);
+    	return list;
+    }
 	
 }

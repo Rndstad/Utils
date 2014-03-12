@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.amoebaman.utils.GenUtil;
 import net.amoebaman.utils.chat.Message.MessagePart;
 import net.minecraft.util.com.google.common.collect.Lists;
 
@@ -117,7 +118,7 @@ public class Align{
 	}
 	
 	public static Object center(Object... objects){
-		List<Object> list = Chat.expand(objects);
+		List<Object> list = GenUtil.expand(objects);
 		if(list.isEmpty())
 			return null;
 		if(list.size() == 1)
@@ -150,7 +151,7 @@ public class Align{
 	}
 	
 	public static List<Object> addSpacers(String border, Object... objects){
-		List<Object> list = Chat.expand(objects);
+		List<Object> list = GenUtil.expand(objects);
 		list.add(0, spacerLine());
 		if(border != null && !border.isEmpty())
 			list.add(0, fillerLine(border));
