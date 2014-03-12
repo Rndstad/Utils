@@ -170,20 +170,9 @@ public class Attributes{
 	 * @param stack an item
 	 */
 	public Attributes(ItemStack stack){
-		
-		// Create a CraftItemStack (under the hood)
 		this.stack = NbtFactory.getCraftItemStack(stack);
-		
-		// Load NBT
 		NbtCompound nbt = NbtFactory.fromItemTag(this.stack);
-		this.attributes = nbt.getList("AttributeModifiers", true);
-		
-	}
-	
-	private void updateNbt(){
-		NbtCompound nbt = NbtFactory.fromItemTag(stack);
-		nbt.put("AttributeModifiers", attributes);
-		NbtFactory.setItemTag(stack, nbt);
+		attributes = nbt.getList("AttributeModifiers", true);
 	}
 
 	/**
@@ -192,6 +181,9 @@ public class Attributes{
 	 * @return the item
 	 */
 	public ItemStack getStack(){
+		NbtCompound nbt = NbtFactory.fromItemTag(stack);
+		nbt.put("AttributeModifiers", attributes);
+		NbtFactory.setItemTag(stack, nbt);
 		return stack;
 	}
 	
@@ -213,18 +205,17 @@ public class Attributes{
 	 */
 	public void add(Attribute attrb){
 		attributes.add(attrb.getNbt());
-		updateNbt();
 	}
 	
 	/**
-	 * Removes an attribute from the internal item.
+	 * Removes an attribute from the internal item.  Equality is checked by
+	 * attribute UUID.
 	 * @param attrb
 	 */
 	public void remove(Attribute attrb){
 		for(Iterator<Attribute> it = getAttributes().iterator(); it.hasNext();)
 			if(it.next().uuid.equals(attrb.uuid))
 				it.remove();
-		updateNbt();
 	}
 	
 	/**
@@ -232,7 +223,6 @@ public class Attributes{
 	 */
 	public void clear(){
 		attributes.clear();
-		updateNbt();
 	}
 	
 }
