@@ -1,13 +1,9 @@
 package net.amoebaman.utils;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Tameable;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -89,6 +85,32 @@ public class GenUtil{
 		for(int i = 0; i < Math.random() * set.size() && it.hasNext(); i++)
 			element = it.next();
 		return element;
+	}
+	
+	public static List<String> objectsToStrings(Iterable<Object> objs){
+		List<String> strs = new ArrayList<String>();
+		for(Object each : objs)
+			strs.add(String.valueOf(each));
+		return strs;
+	}
+	
+	public static List<String> playersToNames(Iterable<Player> players){
+		List<String> names = new ArrayList<String>();
+		for(Player player : players)
+			names.add(player.getName());
+		return names;
+	}
+	
+	public static String concat(Iterable<String> elements, String prefix, String glue, String suffix){
+		String str = prefix;
+		boolean first = true;
+		for(Object element : elements){
+			if(!first)
+				str += glue;
+			str += String.valueOf(element);
+			first = false;
+		}
+		return str + suffix;
 	}
 	
 }
