@@ -208,9 +208,18 @@ public class Attributes{
 	}
 	
 	/**
+	 * Updates the value of an attribute.  Equality is checked by attribute UUID.
+	 * @param attrb an attribute
+	 */
+	public void update(Attribute attrb){
+		remove(attrb);
+		add(attrb);
+	}
+	
+	/**
 	 * Removes an attribute from the internal item.  Equality is checked by
 	 * attribute UUID.
-	 * @param attrb
+	 * @param attrb an attribute
 	 */
 	public void remove(Attribute attrb){
 		for(Iterator<Attribute> it = getAttributes().iterator(); it.hasNext();)
