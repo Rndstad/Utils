@@ -21,44 +21,69 @@ public class Scheme{
 		if(!configFile.exists())
 			try{ configFile.createNewFile(); } catch(IOException ioe){ ioe.printStackTrace(); }
 	}
+	
 	private static final YamlConfiguration config = configFile != null ? YamlConfiguration.loadConfiguration(configFile) : null;
 	static{
+		
 		config.options().header(
 			"This is the chat color scheme configuration file.  All plugins which use the unifying appearence\n" +
 			"chat library ought to obey these values in some form.  Some may add their own schemes, which will\n" +
 			"appear here as well."
 		);
+		
+		config.addDefault("normal.normal", "&7");
+		config.addDefault("normal.strong", "&8");
+		config.addDefault("normal.prefix", "");
+		config.addDefault("normal.suffix", "");
+		
+		config.addDefault("highlight.normal", "&6");
+		config.addDefault("highlight.strong", "&4");
+		config.addDefault("highlight.prefix", "");
+		config.addDefault("highlight.suffix", "");
+		
+		config.addDefault("warning.normal", "&c");
+		config.addDefault("warning.strong", "&8");
+		config.addDefault("warning.prefix", "");
+		config.addDefault("warning.suffix", "");
+		
+		config.addDefault("error.normal", "&c");
+		config.addDefault("error.strong", "&8");
+		config.addDefault("error.prefix", "&8[&cERROR&8]&r ");
+		config.addDefault("error.suffix", "");
+		
+		config.options().copyDefaults(true);
 		config.options().copyHeader(true);
 		try{ config.save(configFile); } catch(IOException ioe){ ioe.printStackTrace(); }
+		
 	}
 	
 	/** Normal chat colors, designed to sort of blend in with other messages */
 	public static final Scheme NORMAL = new Scheme(
-		config != null ? new Format(config.getString("normal.normal", "&7")) : new Format(ChatColor.GRAY),
-		config != null ? new Format(config.getString("normal.strong", "&8")) : new Format(ChatColor.DARK_GRAY),
-		config != null ? config.getString("normal.prefix", "") : "",
-		config != null ? config.getString("normal.suffix", "") : "");
+		config != null ? new Format(config.getString("normal.normal")) : new Format(ChatColor.GRAY),
+		config != null ? new Format(config.getString("normal.strong")) : new Format(ChatColor.DARK_GRAY),
+		config != null ? config.getString("normal.prefix") : "",
+		config != null ? config.getString("normal.suffix") : "");
 	
 	/** Exaggerated chat colors, designed the pop and stand out from other messages */
 	public static final Scheme HIGHLIGHT = new Scheme(
-		config != null ? new Format(config.getString("highlight.normal", "&6")) : new Format(ChatColor.GOLD),
-		config != null ? new Format(config.getString("highlight.strong", "&4")) : new Format(ChatColor.DARK_RED),
-		config != null ? config.getString("highlight.prefix", "") : "",
-		config != null ? config.getString("highlight.suffix", "") : "");
+		config != null ? new Format(config.getString("highlight.normal")) : new Format(ChatColor.GOLD),
+		config != null ? new Format(config.getString("highlight.strong")) : new Format(ChatColor.DARK_RED),
+		config != null ? config.getString("highlight.prefix") : "",
+		config != null ? config.getString("highlight.suffix") : "");
 	
 	/** Warning chat colors, designed to tell players they're doing something wrong */
 	public static final Scheme WARNING = new Scheme(
-		config != null ? new Format(config.getString("warning.normal", "&c")) : new Format(ChatColor.RED),
-		config != null ? new Format(config.getString("warning.strong", "&8")) : new Format(ChatColor.DARK_GRAY),
-		config != null ? config.getString("warning.prefix", "") : "",
-		config != null ? config.getString("warning.suffix", "") : "");
+		config != null ? new Format(config.getString("warning.normal")) : new Format(ChatColor.RED),
+		config != null ? new Format(config.getString("warning.strong")) : new Format(ChatColor.DARK_GRAY),
+		config != null ? config.getString("warning.prefix") : "",
+		config != null ? config.getString("warning.suffix") : "");
 	
 	/** Error chat colors, designed to hint that something has gone horribly wrong */
 	public static final Scheme ERROR = new Scheme(
-		config != null ? new Format(config.getString("warning.normal", "&c")) : new Format(ChatColor.RED),
-		config != null ? new Format(config.getString("warning.strong", "&8")) : new Format(ChatColor.DARK_GRAY),
-		config != null ? config.getString("warning.prefix", "&8[&cERROR&8]&r ") : "",
-		config != null ? config.getString("warning.suffix", "") : "");
+		config != null ? new Format(config.getString("warning.normal")) : new Format(ChatColor.RED),
+		config != null ? new Format(config.getString("warning.strong")) : new Format(ChatColor.DARK_GRAY),
+		config != null ? config.getString("warning.prefix") : "",
+		config != null ? config.getString("warning.suffix") : "");
 	
 	/** That standard text format for this scheme */
 	public final Format normal;
