@@ -28,6 +28,8 @@ public class Scheme{
 			"chat library ought to obey these values in some form.  Some may add their own schemes, which will\n" +
 			"appear here as well."
 		);
+		config.options().copyHeader(true);
+		try{ config.save(configFile); } catch(IOException ioe){ ioe.printStackTrace(); }
 	}
 	
 	/** Normal chat colors, designed to sort of blend in with other messages */
