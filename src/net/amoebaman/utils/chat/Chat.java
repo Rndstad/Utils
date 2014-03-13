@@ -183,7 +183,7 @@ public class Chat{
 	 * @return the formatted string
 	 */
 	public static String format(Object obj, Scheme scheme){
-		return format(scheme.prefix + obj + scheme.suffix).replace("&x", scheme.normal.toString()).replace("&y", scheme.alternate.toString()).replace("&z", scheme.strong.toString());
+		return format(scheme.prefix + "&x" + obj + scheme.suffix).replace("&x", scheme.normal.toString()).replace("&y", scheme.alternate.toString()).replace("&z", scheme.strong.toString());
 	}
 	
 }
