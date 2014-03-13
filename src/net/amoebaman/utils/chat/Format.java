@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 
+import net.minecraft.util.com.google.common.collect.Lists;
+
 /**
  * Consolidated class for storing a compound chat color/style format consisting of a
  * single color (can't display multiple colors at once) and multiple styles.
@@ -28,7 +30,7 @@ public class Format{
 	public Format(ChatColor... codes){
 		styles = new HashSet<ChatColor>();
 		for(ChatColor code : codes)
-			if(code.isColor())
+			if(code != null && code.isColor())
 				color = code;
 			else
 				styles.add(code);
@@ -38,6 +40,10 @@ public class Format{
 			string += color;
 		for(ChatColor style : styles)
 			string += style;
+	}
+	
+	public Format(String sequence){
+		this(Lists.newArrayList(ChatColor.getLastColors(ChatColor.translateAlternateColorCodes('&', sequence)).split(String.valueOf(ChatColor.COLOR_CHAR))).toArray(new ChatColor[0]));
 	}
 	
 	public ChatColor color(){ return color; }
