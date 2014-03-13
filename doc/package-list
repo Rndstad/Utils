@@ -1,1 +1,5 @@
 net.amoebaman.utils
+net.amoebaman.utils.chat
+net.amoebaman.utils.maps
+net.amoebaman.utils.nms
+net.amoebaman.utils.plugin
