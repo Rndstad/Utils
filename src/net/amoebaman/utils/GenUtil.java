@@ -87,6 +87,13 @@ public class GenUtil{
 		return element;
 	}
 	
+	/**
+	 * Transforms an iterable of objects into a list of strings using
+	 * {@link String#valueOf(Object)}.
+	 * 
+	 * @param objs a bunch of objects
+	 * @return a list of strings representing the objects
+	 */
 	public static List<String> objectsToStrings(Iterable<Object> objs){
 		List<String> strs = new ArrayList<String>();
 		for(Object each : objs)
@@ -94,6 +101,13 @@ public class GenUtil{
 		return strs;
 	}
 	
+	/**
+	 * Transforms an iterable of players into a list of their names using
+	 * {@link Player#getName()}.
+	 * 
+	 * @param players a bunch of Players
+	 * @return a list of player names
+	 */
 	public static List<String> playersToNames(Iterable<Player> players){
 		List<String> names = new ArrayList<String>();
 		for(Player player : players)
@@ -101,6 +115,16 @@ public class GenUtil{
 		return names;
 	}
 	
+	/**
+	 * Concatenates an iterable of strings into a single string, capped by a
+	 * prefix and suffix and interspaced with a "glue" string.
+	 * 
+	 * @param elements a bunch of strings
+	 * @param prefix the string to begin with
+	 * @param glue the string to insert between elements
+	 * @param suffix the string to end with
+	 * @return
+	 */
 	public static String concat(Iterable<String> elements, String prefix, String glue, String suffix){
 		String str = prefix;
 		boolean first = true;
@@ -112,39 +136,39 @@ public class GenUtil{
 		}
 		return str + suffix;
 	}
-
+	
 	/**
-     * Packages all arguments into a list, recursively unpacking iterables and
-     * arrays.
-     * <p>
-     * Specifically, this method iterates through all the arguments. If they are
-     * iterable containers or arrays, it will add all their elements to the
-     * returned list, otherwise, it will add the object itself to the returned
-     * list.
-     * <p>
-     * Generally, this method takes a whole junk load of objects, and returns a
-     * single-depth list containing all the elements present, with any arrays
-     * and containers unpacked.
-     * <p>
-     * This method guarantees that no elements returned will be arrays or
-     * containers.
-     * 
-     * @param objects a bunch of objects
-     * @return a single-depth list containing all the arguments
-     */
-    public static List<Object> expand(Object... objects){
-    	List<Object> list = new ArrayList<Object>();
-    	for(Object object : objects)
-    		if(object instanceof Iterable)
-    			for(Object each : (Iterable<Object>) object)
-    				list.addAll(expand(each));
-    		else
-    			if(object instanceof Object[])
-    				for(Object each : (Object[]) object)
-    					list.addAll(expand(each));
-    			else
-    				list.add(object);
-    	return list;
-    }
+	 * Packages all arguments into a list, recursively unpacking iterables and
+	 * arrays.
+	 * <p>
+	 * Specifically, this method iterates through all the arguments. If they are
+	 * iterable containers or arrays, it will add all their elements to the
+	 * returned list, otherwise, it will add the object itself to the returned
+	 * list.
+	 * <p>
+	 * Generally, this method takes a whole junk load of objects, and returns a
+	 * single-depth list containing all the elements present, with any arrays
+	 * and containers unpacked.
+	 * <p>
+	 * This method guarantees that no elements returned will be arrays or
+	 * containers.
+	 * 
+	 * @param objects a bunch of objects
+	 * @return a single-depth list containing all the arguments
+	 */
+	public static List<Object> expand(Object... objects){
+		List<Object> list = new ArrayList<Object>();
+		for(Object object : objects)
+			if(object instanceof Iterable)
+				for(Object each : (Iterable<Object>) object)
+					list.addAll(expand(each));
+			else
+				if(object instanceof Object[])
+					for(Object each : (Object[]) object)
+						list.addAll(expand(each));
+				else
+					list.add(object);
+		return list;
+	}
 	
 }
