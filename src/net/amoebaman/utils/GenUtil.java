@@ -94,7 +94,7 @@ public class GenUtil{
 	 * @param objs a bunch of objects
 	 * @return a list of strings representing the objects
 	 */
-	public static List<String> objectsToStrings(Iterable<Object> objs){
+	public static List<String> objectsToStrings(Iterable<?> objs){
 		List<String> strs = new ArrayList<String>();
 		for(Object each : objs)
 			strs.add(String.valueOf(each));
