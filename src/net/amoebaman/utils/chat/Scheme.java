@@ -126,11 +126,7 @@ public class Scheme{
 	 * @param suffix the suffix for messages in this scheme
 	 */
 	public Scheme(Format normal, Format strong, String prefix, String suffix){
-		this.normal = normal == null ? new Format() : normal;
-		this.alternate = this.normal;
-		this.strong = strong == null ? new Format() : strong;
-		this.prefix = prefix == null ? "" : prefix;
-		this.suffix = suffix == null ? "" : suffix;
+		this(normal, normal, strong, prefix, suffix);
 	}
 	
 }
