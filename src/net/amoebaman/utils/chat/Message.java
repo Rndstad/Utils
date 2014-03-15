@@ -3,10 +3,7 @@ package net.amoebaman.utils.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Achievement;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -311,14 +308,13 @@ public class Message {
 	 * @param text some text
 	 * @return the message (for chaining)
 	 */
-	public Message tooltip(String text) {
-		String[] lines = text.split("\\n");
-		if (lines.length <= 1) {
-			onHover("show_text", text);
-		}
-		else {
+	public Message tooltip(String... lines) {
+		if(lines.length < 1)
+			return this;
+		else if(lines.length == 1)
+			onHover("show_text", lines[0].replace("\"", ""));
+		else
 			itemTooltip(makeMultilineTooltip(lines));
-		}
 		return this;
 	}
 	
@@ -332,17 +328,21 @@ public class Message {
 		return this;
 	}
 	
-	protected String makeMultilineTooltip(String[] lines) {
+	protected String makeMultilineTooltip(String... lines) {
+		String fbdn = "\"";
+		String escSeq = "\\\"";
+		String metaEsc = String.valueOf((char) 128);
+		
 		JsonWriter json = new JsonWriter();
 		try {
 			json.beginObject();
 			json.name("id").value(1);
 			json.name("tag").beginObject();
 			json.name("display").beginObject();
-			json.name("Name").value("\\u00A7f" + lines[0].replace("\"", "\\\""));
+			json.name("Name").value(ChatColor.RESET + lines[0]);
 			json.name("Lore").beginArray();
 			for (int i = 1; i < lines.length; i++)
-				json.value(lines[i].isEmpty() ? " " : lines[i].replace("\"", "\\\""));
+				json.value(lines[i].isEmpty() ? ChatColor.RESET.toString() : metaEsc + lines[i] + metaEsc);
 			json.endArray().endObject().endObject().endObject();
 		}
 		catch (Exception e) {
@@ -350,7 +350,7 @@ public class Message {
 		}
 		String result = json.toString();
 		json.close();
-		return result;
+		return result.replace(fbdn, "").replace(metaEsc, escSeq);
 	}
 	
 	protected void onClick(String name, String data) {
@@ -385,6 +385,8 @@ public class Message {
 					str += style;
 			str += part.text;
 		}
+		if(scheme != null)
+			str += scheme.suffix;
 		
 		text = str;
 		if(scheme != null)
@@ -406,23 +408,15 @@ public class Message {
 		
 		JsonWriter json = new JsonWriter();
 		try {
-			if (messageParts.size() == 1) {
-				latest().writeJson(json);
-			}
-			else {
-				json.beginObject();
-				json.name("text").value("");
-				json.name("extra").beginArray();
-				for (MessagePart part : messageParts)
-					part.writeJson(json);
-				json.endArray();
-				json.endObject();
-			}
+			json.beginArray();
+			for (MessagePart part : messageParts)
+				part.writeJson(json);
+			json.endArray();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		jsonText = json.toString();
+		jsonText = json.toString().replace(String.valueOf((char) 128), "\\\"");
 		if(scheme != null)
 			jsonText = scheme.prefix + jsonText + scheme.suffix;
 		jsonWritten = true;
@@ -462,9 +456,9 @@ public class Message {
 					for (ChatColor style : styles)
 						json.name(style.name().toLowerCase()).value(true);
 				if (clickActionName != null && clickActionData != null)
-					json.name("clickEvent").beginObject().name("action").value(clickActionName).name("value").value(clickActionData).endObject();
+					json.name("clickEvent").beginObject().name("action").value(clickActionName).name("value").value(clickActionData.replace("\\\"", String.valueOf((char) 128))).endObject();
 				if (hoverActionName != null && hoverActionData != null)
-					json.name("hoverEvent").beginObject().name("action").value(hoverActionName).name("value").value(hoverActionData).endObject();
+					json.name("hoverEvent").beginObject().name("action").value(hoverActionName).name("value").value(hoverActionData.replace("\\\"", String.valueOf((char) 128))).endObject();
 				json.endObject();
 			}
 			catch (Exception e) {
