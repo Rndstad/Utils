@@ -50,16 +50,20 @@ public class Chat{
 	 */
 	public static void send(CommandSender receiver, Object... messages){
 		for(Object message : GenUtil.expand(messages))
-			if(message instanceof Message && ((Message) message).usesJson() && receiver instanceof Player){
-				try{
-					Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(receiver).getClass(), "playerConnection").get(ReflectionUtil.getHandle(receiver));
-					Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, message.toString()));
-					ReflectionUtil.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
+			if(message instanceof Message && ((Message) message).usesJson())
+				if(receiver instanceof Player){
+					try{
+						Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(receiver).getClass(), "playerConnection").get(ReflectionUtil.getHandle(receiver));
+						Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, message.toString()));
+						ReflectionUtil.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
+					}
+					catch(Exception e){
+						receiver.sendMessage(((Message) message).getText());
+						e.printStackTrace();
+					}
 				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
-			}
+				else
+					receiver.sendMessage(((Message) message).getText());
 			else
 				receiver.sendMessage(String.valueOf(message));
 	}
