@@ -148,8 +148,8 @@ public class Scheme{
 		this.normal = normal == null ? new Format() : normal;
 		this.alternate = alternate == null ? new Format() : alternate;
 		this.strong = strong == null ? new Format() : strong;
-		this.prefix = prefix == null ? "" : prefix;
-		this.suffix = suffix == null ? "" : suffix;
+		this.prefix = prefix == null ? "" : Chat.format(prefix);
+		this.suffix = suffix == null ? "" : Chat.format(suffix);
 	}
 	
 	/**
