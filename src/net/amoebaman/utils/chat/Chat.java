@@ -36,7 +36,7 @@ public class Chat{
 	 * {@link GenUtil#expand(Object...)}, ensuring no containers or arrays will be sent
 	 * directly, but that their contents will be sent individually.
 	 * <p>
-	 * {@link JsonMessage}{@code s} will be parsed out to their JSON plaintext
+	 * {@link Message}{@code s} using JSON will be parsed out to their JSON plaintext
 	 * and be sent to the player using the proper reflection packet sending to
 	 * ensure the message is fully displayed.
 	 * <p>
@@ -45,26 +45,23 @@ public class Chat{
 	 * {@link Message}{@code s}, this automatically restores them to String
 	 * form.
 	 * 
-	 * @param player the recipient
+	 * @param receiver the recipient
 	 * @param messages some messages
 	 */
-	public static void send(CommandSender player, Object... messages){
+	public static void send(CommandSender receiver, Object... messages){
 		for(Object message : GenUtil.expand(messages))
-			if(message instanceof JsonMessage)
-				if(player instanceof Player){
-					try{
-						Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(player).getClass(), "playerConnection").get(ReflectionUtil.getHandle(player));
-						Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, ChatColor.translateAlternateColorCodes('&', message.toString())));
-						ReflectionUtil.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
-					}
-					catch(Exception e){
-						e.printStackTrace();
-					}
+			if(message instanceof Message && ((Message) message).usesJson() && receiver instanceof Player){
+				try{
+					Object connection = ReflectionUtil.getField(ReflectionUtil.getHandle(receiver).getClass(), "playerConnection").get(ReflectionUtil.getHandle(receiver));
+					Object packet = nmsPacketPlayOutChat.getConstructor(ReflectionUtil.getNMSClass("IChatBaseComponent")).newInstance(ReflectionUtil.getMethod(nmsChatSerializer, "a", String.class).invoke(null, message.toString()));
+					ReflectionUtil.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
 				}
-				else
-					player.sendMessage(format(((JsonMessage) message).getText()));
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 			else
-				player.sendMessage(format(String.valueOf(message)));
+				receiver.sendMessage(String.valueOf(message));
 	}
 	
 	/**
