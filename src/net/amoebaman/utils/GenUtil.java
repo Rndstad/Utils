@@ -7,6 +7,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
+import net.amoebaman.utils.nms.ReflectionUtil;
+
 public class GenUtil{
 	
 	/**
@@ -28,7 +30,7 @@ public class GenUtil{
 				plugin.getLogger().info("Writing new file with default contents");
 				file.createNewFile();
 				file.setWritable(true);
-				InputStream preset = plugin.getClass().getResourceAsStream("/defaults/" + name + ".yml");
+				InputStream preset = plugin.getClass().getResourceAsStream("/" + name + ".yml");
 				if(preset != null){
 					BufferedReader reader = new BufferedReader(new InputStreamReader(preset));
 					BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -94,7 +96,7 @@ public class GenUtil{
 	 * @param objs a bunch of objects
 	 * @return a list of strings representing the objects
 	 */
-	public static List<String> objectsToStrings(Iterable<Object> objs){
+	public static List<String> objectsToStrings(Iterable<?> objs){
 		List<String> strs = new ArrayList<String>();
 		for(Object each : objs)
 			strs.add(String.valueOf(each));
@@ -116,8 +118,10 @@ public class GenUtil{
 	}
 	
 	/**
-	 * Concatenates an iterable of strings into a single string, capped by a
-	 * prefix and suffix and interspaced with a "glue" string.
+	 * Concatenates an iterable of objects into a single string, capped by a
+	 * prefix and suffix and interspaced with a "glue" string.  Each object is
+	 * represented by {@link String#valueOf(Object)}, or alternatively the
+	 * object's {@code getName()} method if it implements one.
 	 * 
 	 * @param elements a bunch of strings
 	 * @param prefix the string to begin with
@@ -125,13 +129,18 @@ public class GenUtil{
 	 * @param suffix the string to end with
 	 * @return
 	 */
-	public static String concat(Iterable<String> elements, String prefix, String glue, String suffix){
+	public static String concat(Iterable<?> elements, String prefix, String glue, String suffix){
 		String str = prefix;
 		boolean first = true;
 		for(Object element : elements){
 			if(!first)
 				str += glue;
-			str += String.valueOf(element);
+			try{
+	            str += ReflectionUtil.getMethod(element.getClass(), "getName", new Class<?>[]{}).invoke(element);
+            }
+            catch(Exception e){
+            	str += String.valueOf(element);
+            }
 			first = false;
 		}
 		return str + suffix;

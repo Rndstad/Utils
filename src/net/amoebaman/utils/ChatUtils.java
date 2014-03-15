@@ -17,8 +17,10 @@ import org.bukkit.DyeColor;
  * All of the text-alignment functions are based off of Minecraft's default chat font widths.  They will most
  * likely be slightly off if you use a texture pack that changes the font.
  * 
+ * @deprecated Start switching over to the classes in {@link net.amoebaman.utils.chat} instead
  * @author AmoebaMan
  */
+@Deprecated
 public class ChatUtils {
 
 	/** The default Minecraft chat box width, in font-pixels */
@@ -182,12 +184,12 @@ public class ChatUtils {
 	 */
 	public static String format(String line, ColorScheme scheme){
 		line = scheme.standard + format(line);
-		line = line.replace("[[[", "[[¦");
-		line = line.replace("]]]", "¥]]");
+		line = line.replace("[[[", "[[]");
+		line = line.replace("]]]", "[]]");
 		line = line.replace("[[", scheme.emphasis.toString());
 		line = line.replace("]]", scheme.standard.toString());
-		line = line.replace("¦", "[");
-		line = line.replace("¥", "]");
+		line = line.replace("]", "[");
+		line = line.replace("[", "]");
 		return line;
 	}
 	

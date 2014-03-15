@@ -26,12 +26,26 @@ public class Format{
 	 * @param codes some color codes
 	 */
 	public Format(ChatColor... codes){
+		setup(codes);
+	}
+	
+	public Format(String sequence){
+		String[] codes = ChatColor.getLastColors(ChatColor.translateAlternateColorCodes('&', sequence)).split(String.valueOf(ChatColor.COLOR_CHAR));
+		ChatColor[] colors = new ChatColor[codes.length];
+		for(int i = 0; i < codes.length; i++)
+			if(!codes[i].isEmpty())
+				colors[i] = ChatColor.getByChar(codes[i]);
+		setup(colors);
+	}
+	
+	private void setup(ChatColor... codes){
 		styles = new HashSet<ChatColor>();
 		for(ChatColor code : codes)
-			if(code.isColor())
-				color = code;
-			else
-				styles.add(code);
+			if(code != null)
+				if(code.isColor())
+					color = code;
+				else
+					styles.add(code);
 		
 		string = "";
 		if(color != null)
