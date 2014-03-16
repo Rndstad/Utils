@@ -18,6 +18,8 @@ public class StringMap<V> extends DefaultedMap<String, V> {
 
     private static final long serialVersionUID = 6529987734197001528L;
     
+    public StringMap(){ super(null); }
+    
     public StringMap(V value){ super(value); }
 
 	public boolean containsKey(Object key) {
