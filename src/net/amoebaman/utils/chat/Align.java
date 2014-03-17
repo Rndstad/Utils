@@ -124,12 +124,14 @@ public class Align{
 		if(list.size() == 1)
 			if(list.get(0) instanceof Message){
 				Message message = (Message) list.get(0);
-				int numSpaces = (SCREEN_WIDTH - getStringWidth(message.getText())) / getCharWidth(' ', false);
+				int width = getStringWidth(message.getText());
+					System.out.println(width);
+				int numSpaces = (SCREEN_WIDTH - width) / getCharWidth(' ', false);
 				String spaces = "";
-				for(int i = 0; i < numSpaces; i++)
+				for(int i = 0; i < numSpaces / 2; i++)
 					spaces += " ";
 				message.messageParts.add(0, new MessagePart(spaces));
-				message.messageParts.add(new MessagePart(spaces));
+				message.then(spaces);
 				return message;
 			}
 			else{

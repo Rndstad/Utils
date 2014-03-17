@@ -3,9 +3,12 @@ package net.amoebaman.utils.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.*;
+import org.bukkit.Achievement;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Statistic;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.amoebaman.utils.JsonWriter;
@@ -49,7 +52,7 @@ public class Message {
 		this.scheme = scheme;
 	}
 	
-	public void send(Player player){
+	public void send(CommandSender player){
 		Chat.send(player, this);
 	}
 	
@@ -64,7 +67,7 @@ public class Message {
 	 * @return the message (for chaining)
 	 */
 	public Message then(Object text) {
-		messageParts.add(new MessagePart(text.toString()));
+		messageParts.add(new MessagePart(String.valueOf(text.toString())));
 		if(scheme != null)
 			format(scheme.normal);
 		return this;
