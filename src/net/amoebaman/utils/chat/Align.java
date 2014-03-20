@@ -125,7 +125,6 @@ public class Align{
 			if(list.get(0) instanceof Message){
 				Message message = (Message) list.get(0);
 				int width = getStringWidth(message.getText());
-					System.out.println(width);
 				int numSpaces = (SCREEN_WIDTH - width) / getCharWidth(' ', false);
 				String spaces = "";
 				for(int i = 0; i < numSpaces / 2; i++)
