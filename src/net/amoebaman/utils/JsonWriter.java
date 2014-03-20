@@ -113,8 +113,13 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 					name("skull").value(((SkullMeta) meta).getOwner());
 				if (meta instanceof MapMeta)
 					name("map").value(((MapMeta) meta).isScaling());
-				if (meta instanceof PotionMeta)
-					name("effects").writeEffectList(((PotionMeta) meta).getCustomEffects());
+				if (meta instanceof PotionMeta){
+					name("effects").beginArray();
+					if(((PotionMeta) meta).hasCustomEffects())
+						for(PotionEffect effect : ((PotionMeta) meta).getCustomEffects())
+							writeEffect(effect);
+					endArray();
+				}
 				if (meta instanceof BookMeta)
 					name("book").writeBook((BookMeta) meta);
 				if (meta instanceof FireworkEffectMeta)
@@ -137,17 +142,12 @@ public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return this;
 	}
 	
-	public JsonWriter writeEffectList(List<PotionEffect> effects) {
-		beginArray();
-		if(effects != null)
-			for (PotionEffect effect : effects) {
-				beginObject();
-				name("type").value(effect.getType().getName());
-				name("duration").value(effect.getDuration());
-				name("amplifier").value(effect.getAmplifier());
-				endObject();
-			}
-		endArray();
+	public JsonWriter writeEffect(PotionEffect effect) {
+		beginObject();
+		name("type").value(effect.getType().getName());
+		name("duration").value(effect.getDuration());
+		name("amplifier").value(effect.getAmplifier());
+		endObject();
 		return this;
 	}
 	

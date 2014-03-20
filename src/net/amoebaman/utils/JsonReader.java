@@ -87,9 +87,12 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 							((SkullMeta) meta).setOwner(nextString());
 						if (name.equals("map"))
 							((MapMeta) meta).setScaling(nextBoolean());
-						if (name.equals("effects"))
-							for (PotionEffect effect : readEffectList())
-								((PotionMeta) meta).addCustomEffect(effect, true);
+						if (name.equals("effects")){
+							beginArray();
+							while(peek() != JsonToken.END_ARRAY)
+								((PotionMeta) meta).addCustomEffect(readEffect(), true);
+							endArray();
+						}
 						if (name.equals("book"))
 							readBook((BookMeta) meta);
 						if (name.equals("burst"))
@@ -119,33 +122,27 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		return item;
 	}
 	
-	public List<PotionEffect> readEffectList() {
-		List<PotionEffect> effects = new ArrayList<PotionEffect>();
+	public PotionEffect readEffect() {
+		PotionEffectType type = null;
+		int duration = 0; int amplifier = 0;
 		try {
-			beginArray();
-			while (peek() != JsonToken.END_ARRAY) {
-				beginObject();
-				PotionEffectType type = null;
-				int duration = 0, amplifier = 0;
-				while (peek() != JsonToken.END_OBJECT) {
-					String name = nextName();
-					if (name.equals("type"))
-						type = PotionEffectType.getByName(nextString());
-					if (name.equals("duration"))
-						duration = nextInt();
-					if (name.equals("amplifier"))
-						amplifier = nextInt();
-				}
-				effects.add(new PotionEffect(type, duration, amplifier));
-				endObject();
+			beginObject();
+			while (peek() != JsonToken.END_OBJECT) {
+				String name = nextName();
+				if (name.equals("type"))
+					type = PotionEffectType.getByName(nextString());
+				if (name.equals("duration"))
+					duration = nextInt();
+				if (name.equals("amplifier"))
+					amplifier = nextInt();
 			}
-			endArray();
+			endObject();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return effects;
+		return new PotionEffect(type, duration, amplifier);
 	}
 	
 	public BookMeta readBook(BookMeta book) {
