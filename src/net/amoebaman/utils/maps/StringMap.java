@@ -3,6 +3,8 @@ package net.amoebaman.utils.maps;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.collect.Sets;
+
 /**
  * A class that provides nearly the exact same functionality as a HashMap<String, V>.  The only difference is
  * that all String keys are checked without regard to case.
@@ -45,7 +47,7 @@ public class StringMap<V> extends DefaultedMap<String, V> {
 		if(!(key instanceof String))
 			return getDefaultValue();
 		V value = get(key);
-		for(String each : keySet())
+		for(String each : Sets.newHashSet(keySet()))
 			if(each.equalsIgnoreCase((String) key))
 				value = super.remove(each);
 		return value;
