@@ -3,11 +3,7 @@ package net.amoebaman.utils;
 import java.io.StringReader;
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonToken;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -20,45 +16,54 @@ import net.amoebaman.utils.nms.Attributes.Attribute;
 import net.amoebaman.utils.nms.Attributes.AttributeType;
 import net.amoebaman.utils.nms.Attributes.Operation;
 
-public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader {
+public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader{
 	
-	public JsonReader(String str) { super(new StringReader(str)); }
+	public JsonReader(String str){
+		super(new StringReader(str));
+	}
 	
-	public void close(){ try{ super.close(); } catch(Exception e){ e.printStackTrace(); } }
+	public void close(){
+		try{
+			super.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
-	public List<ItemStack> readItemList() {
+	public List<ItemStack> readItemList(){
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		try {
+		try{
 			beginArray();
-			while (hasNext() && peek() != JsonToken.END_ARRAY)
+			while(hasNext() && peek() != JsonToken.END_ARRAY)
 				items.add(readItem());
 			endArray();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return items;
 	}
 	
-	public ItemStack readItem() {
+	public ItemStack readItem(){
 		
 		ItemStack item = new ItemStack(Material.AIR);
-		try {
+		try{
 			beginObject();
 			
-			while (hasNext() && peek() != JsonToken.END_OBJECT) {
+			while(hasNext() && peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("type"))
+				if(name.equals("type"))
 					item.setType(Material.getMaterial(nextString()));
-				if (name.equals("data"))
+				if(name.equals("data"))
 					item.setDurability((short) nextInt());
-				if (name.equals("amount"))
+				if(name.equals("amount"))
 					item.setAmount(nextInt());
-				if (name.equals("enchants")) {
+				if(name.equals("enchants")){
 					beginObject();
 					ItemMeta meta = item.getItemMeta();
-					while (peek() != JsonToken.END_OBJECT)
-						if (meta instanceof EnchantmentStorageMeta)
+					while(peek() != JsonToken.END_OBJECT)
+						if(meta instanceof EnchantmentStorageMeta)
 							((EnchantmentStorageMeta) meta).addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
 						else
 							meta.addEnchant(Enchantment.getByName(nextName()), nextInt(), true);
@@ -66,38 +71,38 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 					endObject();
 				}
 				
-				if (name.equals("meta")) {
+				if(name.equals("meta")){
 					beginObject();
 					ItemMeta meta = item.getItemMeta();
-					while (peek() != JsonToken.END_OBJECT) {
+					while(peek() != JsonToken.END_OBJECT){
 						name = nextName();
-						if (name.equals("name"))
-							meta.setDisplayName(nextString());
-						if (name.equals("lore")) {
+						if(name.equals("name"))
+							meta.setDisplayName(ChatColor.RESET + nextString());
+						if(name.equals("lore")){
 							beginArray();
 							List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<String>();
-							while (peek() != JsonToken.END_ARRAY)
-								lore.add(nextString());
+							while(peek() != JsonToken.END_ARRAY)
+								lore.add(ChatColor.RESET + nextString());
 							meta.setLore(lore);
 							endArray();
 						}
-						if (name.equals("color"))
+						if(name.equals("color"))
 							((LeatherArmorMeta) meta).setColor(Color.fromRGB(nextInt()));
-						if (name.equals("skull"))
+						if(name.equals("skull"))
 							((SkullMeta) meta).setOwner(nextString());
-						if (name.equals("map"))
+						if(name.equals("map"))
 							((MapMeta) meta).setScaling(nextBoolean());
-						if (name.equals("effects")){
+						if(name.equals("effects")){
 							beginArray();
 							while(peek() != JsonToken.END_ARRAY)
 								((PotionMeta) meta).addCustomEffect(readEffect(), true);
 							endArray();
 						}
-						if (name.equals("book"))
+						if(name.equals("book"))
 							readBook((BookMeta) meta);
-						if (name.equals("burst"))
+						if(name.equals("burst"))
 							((FireworkEffectMeta) meta).setEffect(readBurst());
-						if (name.equals("firework"))
+						if(name.equals("firework"))
 							readFirework((FireworkMeta) meta);
 					}
 					item.setItemMeta(meta);
@@ -116,91 +121,92 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 			endObject();
 			
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return item;
 	}
 	
-	public PotionEffect readEffect() {
+	public PotionEffect readEffect(){
 		PotionEffectType type = null;
-		int duration = 0; int amplifier = 0;
-		try {
+		int duration = 0;
+		int amplifier = 0;
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("type"))
+				if(name.equals("type"))
 					type = PotionEffectType.getByName(nextString());
-				if (name.equals("duration"))
+				if(name.equals("duration"))
 					duration = nextInt();
-				if (name.equals("amplifier"))
+				if(name.equals("amplifier"))
 					amplifier = nextInt();
 			}
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		return new PotionEffect(type, duration, amplifier);
 	}
 	
-	public BookMeta readBook(BookMeta book) {
-		try {
+	public BookMeta readBook(BookMeta book){
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("title"))
+				if(name.equals("title"))
 					book.setTitle(nextString());
-				if (name.equals("author"))
+				if(name.equals("author"))
 					book.setAuthor(nextString());
-				if (name.equals("pages")) {
+				if(name.equals("pages")){
 					beginArray();
-					while (peek() != JsonToken.END_ARRAY)
+					while(peek() != JsonToken.END_ARRAY)
 						book.addPage(nextString());
 					endArray();
 				}
 			}
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return book;
 	}
 	
-	public BookMeta readBook() {
+	public BookMeta readBook(){
 		return readBook((BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
 	}
 	
-	public FireworkEffect readBurst() {
+	public FireworkEffect readBurst(){
 		FireworkEffect.Builder burst = FireworkEffect.builder();
-		try {
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("type"))
+				if(name.equals("type"))
 					burst.with(FireworkEffect.Type.valueOf(nextString()));
-				if (name.equals("primary")) {
+				if(name.equals("primary")){
 					beginArray();
-					while (peek() != JsonToken.END_ARRAY)
+					while(peek() != JsonToken.END_ARRAY)
 						burst.withColor(Color.fromRGB(nextInt()));
 					endArray();
 				}
-				if (name.equals("fade")) {
+				if(name.equals("fade")){
 					beginArray();
-					while (peek() != JsonToken.END_ARRAY)
+					while(peek() != JsonToken.END_ARRAY)
 						burst.withFade(Color.fromRGB(nextInt()));
 					endArray();
 				}
-				if (name.equals("flicker") && nextBoolean())
+				if(name.equals("flicker") && nextBoolean())
 					burst.withFlicker();
-				if (name.equals("trail") && nextBoolean())
+				if(name.equals("trail") && nextBoolean())
 					burst.withTrail();
 			}
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		
@@ -212,42 +218,42 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		}
 	}
 	
-	public FireworkMeta readFirework(FireworkMeta firework) {
-		try {
+	public FireworkMeta readFirework(FireworkMeta firework){
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("fuse"))
+				if(name.equals("fuse"))
 					firework.setPower(nextInt());
-				if (name.equals("bursts")) {
+				if(name.equals("bursts")){
 					beginArray();
-					while (peek() != JsonToken.END_ARRAY)
+					while(peek() != JsonToken.END_ARRAY)
 						firework.addEffect(readBurst());
 					endArray();
 				}
 			}
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		return firework;
 	}
 	
-	public FireworkMeta readFirework() {
+	public FireworkMeta readFirework(){
 		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK));
 	}
 	
-	public Map<String, String> readMap() {
+	public Map<String, String> readMap(){
 		Map<String, String> map = new HashMap<String, String>();
-		try {
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT)
+			while(peek() != JsonToken.END_OBJECT)
 				map.put(nextName(), nextString());
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return map;
@@ -255,26 +261,26 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	
 	public Location readLoc(){
 		Location loc = Bukkit.getWorlds().get(0).getSpawnLocation();
-		try {
+		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
-				if (name.equals("world"))
+				if(name.equals("world"))
 					loc.setWorld(Bukkit.getWorld(nextString()));
-				if (name.equals("x"))
+				if(name.equals("x"))
 					loc.setX(nextDouble());
-				if (name.equals("y"))
+				if(name.equals("y"))
 					loc.setY(nextDouble());
-				if (name.equals("z"))
+				if(name.equals("z"))
 					loc.setZ(nextDouble());
-				if (name.equals("pitch"))
+				if(name.equals("pitch"))
 					loc.setYaw((float) nextDouble());
-				if (name.equals("yaw"))
+				if(name.equals("yaw"))
 					loc.setPitch((float) nextDouble());
 			}
 			endObject();
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return loc;
@@ -284,7 +290,7 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 		Attribute attrb = new Attribute();
 		try{
 			beginObject();
-			while (peek() != JsonToken.END_OBJECT) {
+			while(peek() != JsonToken.END_OBJECT){
 				String name = nextName();
 				if(name.equals("uuid"))
 					attrb.uuid = UUID.fromString(nextString());
