@@ -17,11 +17,11 @@ import net.amoebaman.utils.nms.Attributes.Operation;
 
 
 public class YamlReader{
-
-public ItemStack readItem(ConfigurationSection section) {
+	
+	public static ItemStack readItem(ConfigurationSection section){
 		
 		ItemStack item = new ItemStack(Material.AIR);
-		try {
+		try{
 			
 			item.setType(Material.getMaterial(section.getString("type")));
 			item.setDurability((short) section.getInt("data"));
@@ -30,7 +30,7 @@ public ItemStack readItem(ConfigurationSection section) {
 			if(section.isConfigurationSection("enchants")){
 				ItemMeta meta = item.getItemMeta();
 				for(String key : section.getConfigurationSection("enchants").getKeys(false))
-					if (meta instanceof EnchantmentStorageMeta)
+					if(meta instanceof EnchantmentStorageMeta)
 						((EnchantmentStorageMeta) meta).addEnchant(Enchantment.getByName(key), section.getInt("enchants." + key), true);
 					else
 						meta.addEnchant(Enchantment.getByName(key), section.getInt("enchants." + key), true);
@@ -58,6 +58,7 @@ public ItemStack readItem(ConfigurationSection section) {
 					((FireworkEffectMeta) meta).setEffect(readBurst(section.getConfigurationSection("meta.burst")));
 				if(section.isConfigurationSection("meta.firework"))
 					readFirework((FireworkMeta) meta, section.getConfigurationSection("meta.firework"));
+				item.setItemMeta(meta);	
 			}
 			
 			if(section.isConfigurationSection("attributes")){
@@ -68,31 +69,31 @@ public ItemStack readItem(ConfigurationSection section) {
 			}
 			
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return item;
 	}
 	
-	public PotionEffect readEffect(ConfigurationSection section) {
+	public static PotionEffect readEffect(ConfigurationSection section){
 		PotionEffectType type = PotionEffectType.getByName(section.getString("type"));
 		int duration = section.getInt("duration");
 		int amplifier = section.getInt("amplifier");
 		return new PotionEffect(type, duration, amplifier);
 	}
 	
-	public BookMeta readBook(BookMeta book, ConfigurationSection section) {
+	public static BookMeta readBook(BookMeta book, ConfigurationSection section){
 		book.setTitle(section.getString("title"));
 		book.setAuthor(section.getString("author"));
 		book.setPages(section.getStringList("pages"));
 		return book;
 	}
 	
-	public BookMeta readBook(ConfigurationSection section) {
+	public static BookMeta readBook(ConfigurationSection section){
 		return readBook((BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK), section);
 	}
 	
-	public FireworkEffect readBurst(ConfigurationSection section) {
+	public static FireworkEffect readBurst(ConfigurationSection section){
 		FireworkEffect.Builder burst = FireworkEffect.builder();
 		burst.with(FireworkEffect.Type.valueOf(section.getString("type")));
 		List<Color> primary = new ArrayList<Color>();
@@ -115,18 +116,18 @@ public ItemStack readItem(ConfigurationSection section) {
 		}
 	}
 	
-	public FireworkMeta readFirework(FireworkMeta firework, ConfigurationSection section) {
+	public static FireworkMeta readFirework(FireworkMeta firework, ConfigurationSection section){
 		firework.setPower(section.getInt("fuse"));
 		for(String key : section.getConfigurationSection("bursts").getKeys(false))
 			firework.addEffect(readBurst(section.getConfigurationSection("bursts." + key)));
 		return firework;
 	}
 	
-	public FireworkMeta readFirework(ConfigurationSection section) {
+	public static FireworkMeta readFirework(ConfigurationSection section){
 		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK), section);
 	}
 	
-	public Location readLoc(ConfigurationSection section){
+	public static Location readLoc(ConfigurationSection section){
 		Location loc = Bukkit.getWorlds().get(0).getSpawnLocation();
 		loc.setX(section.getDouble("x"));
 		loc.setY(section.getDouble("y"));
@@ -136,7 +137,7 @@ public ItemStack readItem(ConfigurationSection section) {
 		return loc;
 	}
 	
-	public Attribute readAttribute(ConfigurationSection section){
+	public static Attribute readAttribute(ConfigurationSection section){
 		Attribute attrb = new Attribute();
 		attrb.uuid = UUID.fromString(section.getString("uuid"));
 		attrb.name = section.getString("name");
