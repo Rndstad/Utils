@@ -58,7 +58,7 @@ public class YamlReader{
 					((FireworkEffectMeta) meta).setEffect(readBurst(section.getConfigurationSection("meta.burst")));
 				if(section.isConfigurationSection("meta.firework"))
 					readFirework((FireworkMeta) meta, section.getConfigurationSection("meta.firework"));
-				item.setItemMeta(meta);	
+				item.setItemMeta(meta);
 			}
 			
 			if(section.isConfigurationSection("attributes")){
