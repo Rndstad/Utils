@@ -212,10 +212,16 @@ public class CommandController implements CommandExecutor{
 					
 				}
 		/*
+		 * Make sure the command isn't null, we might have been passed the command
+		 * because a subcommand was registered but not super-command was
+		 */
+		if(theCmd == null)
+			return false;
+		/*
 		 * Verify that the correct sender was used
 		 */
 		if(!theCmd.getSenderType().isAssignableFrom(sender.getClass())){
-			sender.sendMessage(ChatColor.RED + "This command must be sent by a " + theCmd.getSenderType().getCanonicalName());
+			sender.sendMessage(ChatColor.RED + "This command must be sent by a " + theCmd.getSenderType().getSimpleName());
 			return true;
 		}
 		/*
@@ -223,7 +229,7 @@ public class CommandController implements CommandExecutor{
 		 */
 		for(String node : theCmd.permissions)
 			if(!sender.hasPermission(node)){
-				sender.sendMessage(theCmd.permissionsMessage);
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', theCmd.permissionsMessage));
 				return true;
 			}
 		/*
@@ -243,7 +249,7 @@ public class CommandController implements CommandExecutor{
 			return true;
 		}
 		catch (Exception e) {
-			sender.sendMessage(ChatColor.RED + "An error occurred while trying to process the command");
+			sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
 			e.printStackTrace();
 		}
 		

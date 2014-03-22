@@ -1,6 +1,5 @@
 package net.amoebaman.utils.maps;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,18 +27,13 @@ import org.bukkit.entity.Player;
  *
  * @param <V> whatever you want to store
  */
-public class PlayerMap<V> extends HashMap<String, V>{
+public class PlayerMap<V> extends DefaultedMap<String, V>{
 
     private static final long serialVersionUID = 8042999281349275123L;
-    private final V defaultValue;
-	
-	public PlayerMap(){ defaultValue = null; }
-	
-	public PlayerMap(V defaultV){ defaultValue = defaultV; }
-	
-	public V getDefaultValue(){
-		return defaultValue;
-	}
+    
+    public PlayerMap(){ super(null); }
+    
+    public PlayerMap(V value){ super(value); }
 
 	public boolean containsKey(Object key) {
 		if(key instanceof Player)
@@ -61,12 +55,10 @@ public class PlayerMap<V> extends HashMap<String, V>{
 	}
 
 	public V get(Object key) {
-		V result = null;
 		if(key instanceof Player)
-			result = super.get(((Player) key).getName());
-		if(key instanceof String)
-			result = super.get(key);
-		return (result == null) ? defaultValue : result;
+			return super.get(((Player) key).getName());
+		else
+			return super.get(key);
 	}
 	
 	public Set<Player> playerKeySet(){

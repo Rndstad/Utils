@@ -1,8 +1,9 @@
 package net.amoebaman.utils.maps;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.common.collect.Sets;
 
 /**
  * A class that provides nearly the exact same functionality as a HashMap<String, V>.  The only difference is
@@ -15,18 +16,13 @@ import java.util.Map.Entry;
  *
  * @param <V> whatever you want to store
  */
-public class StringMap<V> extends HashMap<String, V> {
+public class StringMap<V> extends DefaultedMap<String, V> {
 
     private static final long serialVersionUID = 6529987734197001528L;
-    private final V defaultValue;
-	
-	public StringMap(){ defaultValue = null; }
-	
-	public StringMap(V defaultV){ defaultValue = defaultV; }
-	
-	public V getDefaultValue(){
-		return defaultValue;
-	}
+    
+    public StringMap(){ super(null); }
+    
+    public StringMap(V value){ super(value); }
 
 	public boolean containsKey(Object key) {
 		if(!(key instanceof String))
@@ -39,19 +35,19 @@ public class StringMap<V> extends HashMap<String, V> {
 
 	public V get(Object key) {
 		if(!(key instanceof String))
-			return defaultValue;
+			return getDefaultValue();
 		V value = null;
 		for(String each : keySet())
 			if(each.equalsIgnoreCase((String) key))
 				value = super.get(each);
-		return (value == null) ? defaultValue : value;
+		return value == null ? getDefaultValue() : value;
 	}
 
 	public V remove(Object key) {
 		if(!(key instanceof String))
-			return defaultValue;
+			return getDefaultValue();
 		V value = get(key);
-		for(String each : keySet())
+		for(String each : Sets.newHashSet(keySet()))
 			if(each.equalsIgnoreCase((String) key))
 				value = super.remove(each);
 		return value;
