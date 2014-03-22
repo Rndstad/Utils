@@ -49,7 +49,7 @@ public class Scheme{
 		
 		@EventHandler
 		public void commandPreProcess(PlayerCommandPreprocessEvent event){
-			if(event.getMessage().contains("colorscheme -reload") && event.getPlayer().isOp()){
+			if(event.getMessage().contains(config.getString("reload-command")) && event.getPlayer().isOp()){
 				loadSchemes();
 				new Message(NORMAL).then("Chat color schemes have been reloaded").send(event.getPlayer());
 				event.setCancelled(true);
@@ -92,6 +92,7 @@ public class Scheme{
 			"chat library ought to obey these values in some form.  Some may add their own schemes, which will\n" +
 			"appear here as well."
 		);
+		config.addDefault("reload-command", "colorscheme -reload");
 		config.addDefault("normal.normal", "&7"); config.addDefault("normal.strong", "&8"); config.addDefault("normal.prefix", ""); config.addDefault("normal.suffix", "");
 		config.addDefault("highlight.normal", "&6"); config.addDefault("highlight.strong", "&4"); config.addDefault("highlight.prefix", ""); config.addDefault("highlight.suffix", "");
 		config.addDefault("warning.normal", "&c"); config.addDefault("warning.strong", "&8"); config.addDefault("warning.prefix", ""); config.addDefault("warning.suffix", "");
