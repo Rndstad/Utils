@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
 import net.amoebaman.utils.nms.ReflectionUtil;
@@ -48,28 +47,6 @@ public class GenUtil{
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	/**
-	 * Gets the {@link LivingEntity} truly responsible for the damage, if there
-	 * is one. This will trace back indirect damage to its source, including
-	 * arrows to their shooters, and wolves to their owners.
-	 * 
-	 * @param event the event in question
-	 * @return the true culprit, or null if the culprit is not a living entity
-	 */
-	public static LivingEntity getTrueCulprit(EntityDamageByEntityEvent event){
-		Entity damager = event.getDamager();
-		if(damager instanceof LivingEntity)
-			return (LivingEntity) event.getDamager();
-		else
-			if(damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof LivingEntity)
-				return (LivingEntity) ((Projectile) damager).getShooter();
-			else
-				if(damager instanceof Tameable && ((Tameable) damager).getOwner() instanceof LivingEntity)
-					return (LivingEntity) ((Tameable) damager).getOwner();
-				else
-					return null;
 	}
 	
 	/**
@@ -119,7 +96,7 @@ public class GenUtil{
 	
 	/**
 	 * Concatenates an iterable of objects into a single string, capped by a
-	 * prefix and suffix and interspaced with a "glue" string.  Each object is
+	 * prefix and suffix and interspaced with a "glue" string. Each object is
 	 * represented by {@link String#valueOf(Object)}, or alternatively the
 	 * object's {@code getName()} method if it implements one.
 	 * 
@@ -136,11 +113,11 @@ public class GenUtil{
 			if(!first)
 				str += glue;
 			try{
-	            str += ReflectionUtil.getMethod(element.getClass(), "getName", new Class<?>[]{}).invoke(element);
-            }
-            catch(Exception e){
-            	str += String.valueOf(element);
-            }
+				str += ReflectionUtil.getMethod(element.getClass(), "getName", new Class<?>[]{}).invoke(element);
+			}
+			catch(Exception e){
+				str += String.valueOf(element);
+			}
 			first = false;
 		}
 		return str + suffix;
@@ -171,13 +148,11 @@ public class GenUtil{
 			if(object instanceof Iterable)
 				for(Object each : (Iterable<Object>) object)
 					list.addAll(expand(each));
+			else if(object instanceof Object[])
+				for(Object each : (Object[]) object)
+					list.addAll(expand(each));
 			else
-				if(object instanceof Object[])
-					for(Object each : (Object[]) object)
-						list.addAll(expand(each));
-				else
-					list.add(object);
+				list.add(object);
 		return list;
 	}
-	
 }
