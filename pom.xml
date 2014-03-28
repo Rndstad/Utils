@@ -71,7 +71,7 @@
             <url>http://nexus.theyeticave.net/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>heoes-repo</id>
+            <id>heroes-repo</id>
             <name>Private Snapshots</name>
             <url>http://nexus.theyeticave.net/content/repositories/snapshots/</url>
         </snapshotRepository>
