@@ -273,7 +273,7 @@ public class NbtFactory {
 		 *            - the path to split.
 		 * @return The elements. */
 		private List<String> getPathElements(String path) {
-			return Lists.newArrayList(Splitter.on(".").omitEmptyStrings().split(path));
+			return Lists.newArrayList(Splitter.on("").omitEmptyStrings().split(path));
 		}
 	}
 	
