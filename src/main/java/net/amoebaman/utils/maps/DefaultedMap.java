@@ -6,6 +6,11 @@ import java.util.HashMap;
  * Extended {@link HashMap} with the ability to store a default value, to be
  * returned in lieu of a null when attempting to get a key that has not yet been
  * set.
+ * <p>
+ * <b>WARNING:</b> the provided default value <b>is not cloned</b> when returned
+ * in absence of a defined value. Two different requests for absent keys will
+ * return the same object as the default value.  Be very careful when using
+ * mutable objects as default values.
  * 
  * @author AmoebaMan
  */
@@ -56,5 +61,4 @@ public class DefaultedMap<K, V> extends HashMap<K, V>{
 		V result = super.get(key);
 		return (result == null) ? defaultValue : result;
 	}
-	
 }
