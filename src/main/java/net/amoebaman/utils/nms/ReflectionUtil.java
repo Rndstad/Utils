@@ -35,7 +35,7 @@ public class ReflectionUtil {
 	 * @return the class, or null if none was found
 	 */
     public static Class<?> getNMSClass(String className) {
-        String fullName = "net.minecraft.server." + getVersion() + className;
+        String fullName = "net.minecraft.server." + getVersion() + "." + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
@@ -52,7 +52,7 @@ public class ReflectionUtil {
      * @return the class, or null if none was found
      */
     public static Class<?> getOBCClass(String className){
-        String fullName = "org.bukkit.craftbukkit." + getVersion() + className;
+        String fullName = "org.bukkit.craftbukkit." + getVersion() + "." + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
