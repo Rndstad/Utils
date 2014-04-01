@@ -1,7 +1,9 @@
 package net.amoebaman.utils.chat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Achievement;
 import org.bukkit.ChatColor;
@@ -114,11 +116,10 @@ public class Message {
 	 * @param styles some styles
 	 * @return the message (for chaining)
 	 */
-	public Message style(ChatColor... styles) {
-		for (ChatColor style : styles)
-			if (style == null || !style.isFormat())
-				return this;
-		latest().styles = styles;
+	public Message style(ChatColor... styles){
+		for(ChatColor style : styles)
+			if(style.isFormat())
+				latest().styles.put(style, true);
 		written = false;
 		return this;
 	}
@@ -384,8 +385,9 @@ public class Message {
 			if(part.color != null)
 				str += part.color;
 			if(part.styles != null)
-				for(ChatColor style : part.styles)
-					str += style;
+				for(ChatColor style : part.styles.keySet())
+					if(part.styles.get(style))
+						str += style;
 			str += part.text;
 		}
 		if(scheme != null)
@@ -442,34 +444,40 @@ public class Message {
 	 */
 	public static class MessagePart {
 		
-		private ChatColor color = ChatColor.RESET;
-		private ChatColor[] styles = new ChatColor[0];
 		private String text;
+		private ChatColor color;
+		private Map<ChatColor, Boolean> styles;
 		private String clickActionName = null, clickActionData = null, hoverActionName = null, hoverActionData = null;
 		
-		public MessagePart(String text) { this.text = text; }
-
-		private JsonWriter writeJson(JsonWriter json) {
-			try {
+		public MessagePart(String text){
+			this.text = text;
+			color = ChatColor.RESET;
+			styles = new HashMap<ChatColor, Boolean>();
+			for(ChatColor style : ChatColor.values())
+				if(style.isFormat())
+					styles.put(style, false);
+		}
+		
+		private JsonWriter writeJson(JsonWriter json){
+			try{
 				json.beginObject();
 				json.name("text").value(text);
-				if (color != null)
+				if(color != null)
 					json.name("color").value(color.name().toLowerCase());
-				if (styles != null)
-					for (ChatColor style : styles)
-						json.name(style.name().toLowerCase()).value(true);
-				if (clickActionName != null && clickActionData != null)
+				if(styles != null)
+					for(ChatColor style : styles.keySet())
+						json.name(style.name().toLowerCase()).value(styles.get(style));
+				if(clickActionName != null && clickActionData != null)
 					json.name("clickEvent").beginObject().name("action").value(clickActionName).name("value").value(clickActionData.replace("\\\"", String.valueOf((char) 128))).endObject();
-				if (hoverActionName != null && hoverActionData != null)
+				if(hoverActionName != null && hoverActionData != null)
 					json.name("hoverEvent").beginObject().name("action").value(hoverActionName).name("value").value(hoverActionData.replace("\\\"", String.valueOf((char) 128))).endObject();
 				json.endObject();
 			}
-			catch (Exception e) {
+			catch(Exception e){
 				e.printStackTrace();
 			}
 			return json;
 		}
-		
 	}
 	
 }
