@@ -1,9 +1,6 @@
 package net.amoebaman.utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +72,16 @@ public class SQLWrapper{
 				Bukkit.getLogger().info("[SQL] Successfully reconnected");
 		}
 		return true;
+	}
+	
+	public void disconnect(){
+		try{
+			if(connection != null)
+				connection.close();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
