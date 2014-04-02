@@ -3,7 +3,6 @@ package net.amoebaman.utils;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -210,8 +209,8 @@ public class SQLWrapper{
 	 * @param columnNames the names of the columns to get
 	 * @return the transformed result set
 	 */
-	public List<Map<String, Object>> transformRS(ResultSet rs, String... columnNames){
-		List<Map<String, Object>> transform = new ArrayList<Map<String, Object>>();
+	public RSListMap transformRS(ResultSet rs, String... columnNames){
+		RSListMap transform = new RSListMap();
 		try{
 			while(rs.next()){
 				Map<String, Object> line = new HashMap<String, Object>();
