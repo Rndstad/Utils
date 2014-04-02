@@ -225,4 +225,14 @@ public class SQLWrapper{
 		}
 		return transform;
 	}
+	
+	/**
+	 * Convenience class, since "{@code List<Map<String, Object>>}" is a pain in
+	 * the @$$
+	 * to write.
+	 * 
+	 * @author AmoebaMan
+	 */
+	@SuppressWarnings("serial")
+	public class RSListMap extends ArrayList<Map<String, Object>>{}
 }
