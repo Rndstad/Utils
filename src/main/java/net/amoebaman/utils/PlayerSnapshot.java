@@ -22,9 +22,11 @@ public class PlayerSnapshot{
 	
 	private boolean healthScaled;
 	private double health, maxHealth, healthScale;
-	private float food, saturation, exhaustion;
+	private int food;
+	private float saturation, exhaustion;
 	private int air, maxAir;
-	private int exp;
+	private float exp;
+	private int level;
 	private GameMode mode;
 	private Location loc;
 	private ItemStack[] inv, armor, chest;
@@ -50,7 +52,8 @@ public class PlayerSnapshot{
 		air = player.getRemainingAir();
 		maxAir = player.getMaximumAir();
 		
-		exp = player.getTotalExperience();
+		exp = player.getExp();
+		level = player.getLevel();
 		
 		inv = player.getInventory().getContents();
 		armor = player.getInventory().getArmorContents();
@@ -95,7 +98,8 @@ public class PlayerSnapshot{
 		player.setRemainingAir(air);
 		player.setMaximumAir(maxAir);
 		
-		player.setTotalExperience(exp);
+		player.setExp(exp);
+		player.setLevel(level);
 		
 		player.getInventory().setContents(inv);
 		player.getInventory().setArmorContents(armor);
