@@ -151,7 +151,7 @@ public class SQLWrapper{
 				statement.setObject(i + 1, args[i]);
 			int count = statement.executeUpdate();
 			if(debug)
-				Bukkit.getLogger().info("[SQL] Successfully executed command \"" + statement.toString() + "\", updated " + count + " rows (" + (System.currentTimeMillis() - startTime) + "ms)");
+				Bukkit.getLogger().info("[SQL] Successfully executed command \"" + command + "\", updated " + count + " rows (" + (System.currentTimeMillis() - startTime) + "ms)");
 		}
 		catch(Exception e){
 			if(debug)
@@ -206,7 +206,7 @@ public class SQLWrapper{
 				statement.setObject(i + 1, args[i]);
 			ResultSet set = statement.executeQuery();
 			if(debug)
-				Bukkit.getLogger().info("[SQL] Successfully executed query \"" + statement.toString() + "\" (" + (System.currentTimeMillis() - startTime) + "ms)");
+				Bukkit.getLogger().info("[SQL] Successfully executed query \"" + query + "\" (" + (System.currentTimeMillis() - startTime) + "ms)");
 			return set;
 		}
 		catch(Exception e){
