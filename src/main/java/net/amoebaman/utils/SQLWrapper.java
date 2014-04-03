@@ -131,6 +131,8 @@ public class SQLWrapper{
 	 * @param args arguments for the command
 	 */
 	public void executeCommand(String command, Object... args){
+		if(command == null || command.isEmpty())
+			return;
 		long startTime = System.currentTimeMillis();
 		if(!validateConnection())
 			return;
@@ -178,6 +180,8 @@ public class SQLWrapper{
 	 * @return the result, or null if something went wrong
 	 */
 	public ResultSet executeQuery(String query, Object... args){
+		if(query == null || query.isEmpty())
+			return null;
 		long startTime = System.currentTimeMillis();
 		if(!validateConnection())
 			return null;
