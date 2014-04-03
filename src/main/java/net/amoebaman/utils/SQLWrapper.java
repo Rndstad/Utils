@@ -73,6 +73,9 @@ public class SQLWrapper{
 		return true;
 	}
 	
+	/**
+	 * Closes the connection to the SQL server.
+	 */
 	public void disconnect(){
 		try{
 			if(connection != null)
@@ -131,8 +134,14 @@ public class SQLWrapper{
 	 * @param args arguments for the command
 	 */
 	public void executeCommand(String command, Object... args){
-		if(command == null || command.isEmpty())
+		if(command == null || command.isEmpty()){
+			if(debug){
+				Bukkit.getLogger().info("[SQL] Received null SQL command from:");
+				for(StackTraceElement e : new Exception().fillInStackTrace().getStackTrace())
+					Bukkit.getLogger().info(" > " + e);
+			}
 			return;
+		}
 		long startTime = System.currentTimeMillis();
 		if(!validateConnection())
 			return;
@@ -180,8 +189,14 @@ public class SQLWrapper{
 	 * @return the result, or null if something went wrong
 	 */
 	public ResultSet executeQuery(String query, Object... args){
-		if(query == null || query.isEmpty())
+		if(query == null || query.isEmpty()){
+			if(debug){
+				Bukkit.getLogger().info("[SQL] Received null SQL command from:");
+				for(StackTraceElement e : new Exception().fillInStackTrace().getStackTrace())
+					Bukkit.getLogger().info(" > " + e);
+			}
 			return null;
+		}
 		long startTime = System.currentTimeMillis();
 		if(!validateConnection())
 			return null;
