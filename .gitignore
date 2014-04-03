@@ -51,6 +51,7 @@ xcuserdata/
 .settings
 .fatjar
 /bin
+/target
 
 # IntelliJ #
 ############

@@ -3,12 +3,13 @@ package net.amoebaman.utils;
 import java.io.*;
 import java.util.*;
 
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import net.amoebaman.utils.nms.ReflectionUtil;
 
-public class GenUtil{
+public class GenUtil extends JavaPlugin{
 	
 	/**
 	 * Gets a YAML (.yml) configuration file from the plugin's folder. If the
