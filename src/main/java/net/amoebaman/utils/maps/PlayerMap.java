@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
  * @param <V> whatever you want to store
  */
 public class PlayerMap<V> extends DefaultedMap<String, V>{
-
+	
     private static final long serialVersionUID = 8042999281349275123L;
     
     public PlayerMap(){ super(null); }

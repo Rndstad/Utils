@@ -3,11 +3,11 @@ package net.amoebaman.utils;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.util.com.google.common.collect.Lists;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class contains utilities for working with Minecraft's chat box, to make pretty and understandable

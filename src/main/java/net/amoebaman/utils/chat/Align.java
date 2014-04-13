@@ -6,9 +6,10 @@ import java.util.List;
 
 import net.amoebaman.utils.GenUtil;
 import net.amoebaman.utils.chat.Message.MessagePart;
-import net.minecraft.util.com.google.common.collect.Lists;
 
 import org.bukkit.ChatColor;
+
+import com.google.common.collect.Lists;
 
 /**
  * Contains static values and operations designed to assist with aligning text
