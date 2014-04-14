@@ -101,11 +101,11 @@ public class GenUtil extends JavaPlugin{
 	 * represented by {@link String#valueOf(Object)}, or alternatively the
 	 * object's {@code getName()} method if it implements one.
 	 * 
-	 * @param elements a bunch of strings
+	 * @param elements a bunch of objects
 	 * @param prefix the string to begin with
 	 * @param glue the string to insert between elements
 	 * @param suffix the string to end with
-	 * @return
+	 * @return the composite string
 	 */
 	public static String concat(Iterable<?> elements, String prefix, String glue, String suffix){
 		String str = prefix;
@@ -114,7 +114,7 @@ public class GenUtil extends JavaPlugin{
 			if(!first)
 				str += glue;
 			try{
-				str += ReflectionUtil.getMethod(element.getClass(), "getName", new Class<?>[]{}).invoke(element);
+				str += ReflectionUtil.getMethod(element.getClass(), "getName").invoke(element);
 			}
 			catch(Exception e){
 				str += String.valueOf(element);
@@ -122,6 +122,27 @@ public class GenUtil extends JavaPlugin{
 			first = false;
 		}
 		return str + suffix;
+	}
+
+	/**
+	 * See {@link #concat(Iterable, String, String, String)}.
+	 * 
+	 * @param elements a bunch of objects
+	 * @param glue the string to insert between elements
+	 * @return the composite string
+	 */
+	public static String concat(Iterable<?> elements, String glue){
+		return concat(elements, "", glue, "");
+	}
+	
+	/**
+	 * See {@link #concat(Iterable, String, String, String)}
+	 * 
+	 * @param elements a bunch of objects
+	 * @return the composite string
+	 */
+	public static String concat(Iterable<?> elements){
+		return concat(elements, "");
 	}
 	
 	/**
@@ -156,4 +177,5 @@ public class GenUtil extends JavaPlugin{
 				list.add(object);
 		return list;
 	}
+	
 }
