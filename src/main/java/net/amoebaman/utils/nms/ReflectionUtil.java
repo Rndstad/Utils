@@ -24,7 +24,7 @@ public class ReflectionUtil {
 	 */
 	public static String getVersion(){
         String name = Bukkit.getServer().getClass().getPackage().getName();
-        String version = name.substring(name.lastIndexOf('.') + 1) + "";
+        String version = name.substring(name.lastIndexOf('.') + 1);
         return version;
 	}
 
@@ -108,7 +108,7 @@ public class ReflectionUtil {
      */
     public static Method getMethod(Class<?> clazz, String name, Class<?>... args) {
         for (Method m : clazz.getMethods()) 
-            if (m.getName().equals(name) && (args.length == 0 || ClassListEqual(args, m.getParameterTypes()))){
+            if (m.getName().equals(name) && (args.length == 0 || classListEqual(args, m.getParameterTypes()))){
             	m.setAccessible(true);
                 return m;
             }
@@ -121,7 +121,7 @@ public class ReflectionUtil {
      * @param l2 another class array
      * @return true if the two arrays contain the same classes in the same order, false otherwise
      */
-    public static boolean ClassListEqual(Class<?>[] l1, Class<?>[] l2) {
+    public static boolean classListEqual(Class<?>[] l1, Class<?>[] l2) {
         boolean equal = true;
         if (l1.length != l2.length)
             return false;
