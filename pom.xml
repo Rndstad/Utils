@@ -45,10 +45,10 @@
 		</dependencies>
 
 		<distributionManagement>
-				<repository>
-						<id>amoeba-repo</id>
-						<url>file:///Users/AmoebaMan//Sites/mvn</url>
-				</repository>
+                <repository>
+                        <id>amoeba-repo</id>
+                        <url>http://local.amoebaman.net:8081/nexus/content/repositories/amoeba-repo/</url>
+                </repository>
 		</distributionManagement>
 
 		<build>
