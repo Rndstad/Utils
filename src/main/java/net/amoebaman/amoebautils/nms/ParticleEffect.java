@@ -1,4 +1,4 @@
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

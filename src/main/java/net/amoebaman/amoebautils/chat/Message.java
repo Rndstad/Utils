@@ -1,4 +1,4 @@
-package net.amoebaman.utils.chat;
+package net.amoebaman.amoebautils.chat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import net.amoebaman.utils.JsonWriter;
-import net.amoebaman.utils.nms.ReflectionUtil;
+import net.amoebaman.amoebautils.JsonWriter;
+import net.amoebaman.amoebautils.nms.ReflectionUtil;
 
 
 /**

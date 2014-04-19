@@ -1,4 +1,4 @@
-package net.amoebaman.utils.chat;
+package net.amoebaman.amoebautils.chat;
 
 import java.io.File;
 import java.io.IOException;

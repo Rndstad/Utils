@@ -1,4 +1,4 @@
-package net.amoebaman.utils.maps;
+package net.amoebaman.amoebautils.maps;
 
 import java.util.Map;
 import java.util.Map.Entry;

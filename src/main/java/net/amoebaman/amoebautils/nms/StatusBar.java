@@ -1,9 +1,9 @@
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import net.amoebaman.utils.maps.PlayerMap;
+import net.amoebaman.amoebautils.maps.PlayerMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

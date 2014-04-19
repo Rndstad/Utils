@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.util.*;
 
@@ -10,10 +10,10 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.amoebaman.utils.nms.Attributes;
-import net.amoebaman.utils.nms.Attributes.Attribute;
-import net.amoebaman.utils.nms.Attributes.AttributeType;
-import net.amoebaman.utils.nms.Attributes.Operation;
+import net.amoebaman.amoebautils.nms.Attributes;
+import net.amoebaman.amoebautils.nms.Attributes.Attribute;
+import net.amoebaman.amoebautils.nms.Attributes.AttributeType;
+import net.amoebaman.amoebautils.nms.Attributes.Operation;
 
 
 public class YamlReader{

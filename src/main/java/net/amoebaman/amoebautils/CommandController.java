@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import net.amoebaman.utils.chat.Chat;
+import net.amoebaman.amoebautils.chat.Chat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

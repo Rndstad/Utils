@@ -1,4 +1,4 @@
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import java.io.BufferedInputStream;
 import java.io.DataInput;

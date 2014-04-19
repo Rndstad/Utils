@@ -1,4 +1,4 @@
-package net.amoebaman.utils.chat;
+package net.amoebaman.amoebautils.chat;
 
 public enum CustomChar {
 	

@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 
-import net.amoebaman.utils.nms.Attributes;
-import net.amoebaman.utils.nms.Attributes.Attribute;
+import net.amoebaman.amoebautils.nms.Attributes;
+import net.amoebaman.amoebautils.nms.Attributes.Attribute;
 
 public class YamlWriter{
 	

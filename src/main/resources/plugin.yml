@@ -1,6 +1,6 @@
-main: net.amoebaman.utils.GenUtil
+main: net.amoebaman.amoebautils.AmoebaUtils
 
-name: Utils
+name: AmoebaUtils
 version: 1.0
 author: AmoebaMan
 description: Lots of useful libraries and such

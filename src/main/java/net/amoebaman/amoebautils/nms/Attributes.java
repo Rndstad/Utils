@@ -1,5 +1,5 @@
 
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.amoebaman.utils.nms.NbtFactory.NbtCompound;
-import net.amoebaman.utils.nms.NbtFactory.NbtList;
+import net.amoebaman.amoebautils.nms.NbtFactory.NbtCompound;
+import net.amoebaman.amoebautils.nms.NbtFactory.NbtList;
 
 /**
  * A class to ease the task of manipulating and editing the attributes system

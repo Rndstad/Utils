@@ -16,6 +16,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.common.collect.Sets;
 
+import net.amoebaman.amoebautils.AmoebaUtils;
+
 import net.minecraft.util.com.google.common.collect.Lists;
 
 @RunWith(PowerMockRunner.class)
@@ -35,7 +37,7 @@ public class GenUtilTest{
 	@Test
 	public void testGetRandomElement(){
 		Set set = Sets.newHashSet("I", "like", "cheese");
-		assertTrue("set actually contains the random element selected", set.contains(GenUtil.getRandomElement(set)));
+		assertTrue("set actually contains the random element selected", set.contains(AmoebaUtils.getRandomElement(set)));
 	}
 	
 	@Test
@@ -46,21 +48,21 @@ public class GenUtilTest{
 			new Object(){ public String toString(){ return "spud"; } }
 		);
 		
-		assertEquals("potato = spud", GenUtil.concat(objects));
+		assertEquals("potato = spud", AmoebaUtils.concat(objects));
 	}
 	
 	@Test
 	public void testPlayersToNames(){
 		List<Player> players = Lists.newArrayList(mockPlayer("AmoebaMan"), mockPlayer("Kainzo"), mockPlayer("Dinnerbone"));
-		List<String> names = GenUtil.playersToNames(players);
+		List<String> names = AmoebaUtils.playersToNames(players);
 		
-		assertEquals("AmoebaMan, Kainzo, Dinnerbone", GenUtil.concat(names, ", "));
+		assertEquals("AmoebaMan, Kainzo, Dinnerbone", AmoebaUtils.concat(names, ", "));
 	}
 	
 	@Test
 	public void testConcat(){
 		List<Object> list = Lists.newArrayList(mockPlayer("Pie"), "is", "mighty", "delicious!");
-		String concat = GenUtil.concat(list, "Bob said, \"", " ", "\"");
+		String concat = AmoebaUtils.concat(list, "Bob said, \"", " ", "\"");
 		
 		assertEquals("Bob said, \"Pie is mighty delicious!\"", concat);
 	}
@@ -68,9 +70,9 @@ public class GenUtilTest{
 	@Test
 	public void testExpand(){
 		Object original = Lists.newArrayList("I ", "am ", new String[]{"a ", "huge "}, Lists.newArrayList("fan ", "of ", new String[]{"both ", "pie "}, "and "), "cheese");
-		List<Object> expanded = GenUtil.expand(original, "!");
+		List<Object> expanded = AmoebaUtils.expand(original, "!");
 		
-		assertEquals("I am a huge fan of both pie and cheese!", GenUtil.concat(expanded));
+		assertEquals("I am a huge fan of both pie and cheese!", AmoebaUtils.concat(expanded));
 	}
 	
 }

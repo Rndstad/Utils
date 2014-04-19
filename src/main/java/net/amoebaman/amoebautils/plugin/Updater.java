@@ -4,7 +4,7 @@
  * This class provides the means to safely and easily update a plugin, or check to see if it is updated using dev.bukkit.org
  */
 
-package net.amoebaman.utils.plugin;
+package net.amoebaman.amoebautils.plugin;
 
 import java.io.*;
 import java.net.MalformedURLException;

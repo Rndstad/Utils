@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.sql.*;
 import java.util.ArrayList;

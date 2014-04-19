@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.io.StringReader;
 import java.util.*;
@@ -11,10 +11,10 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.amoebaman.utils.nms.*;
-import net.amoebaman.utils.nms.Attributes.Attribute;
-import net.amoebaman.utils.nms.Attributes.AttributeType;
-import net.amoebaman.utils.nms.Attributes.Operation;
+import net.amoebaman.amoebautils.nms.*;
+import net.amoebaman.amoebautils.nms.Attributes.Attribute;
+import net.amoebaman.amoebautils.nms.Attributes.AttributeType;
+import net.amoebaman.amoebautils.nms.Attributes.Operation;
 
 public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader{
 	

@@ -1,10 +1,10 @@
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import java.util.UUID;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.amoebaman.utils.nms.Attributes.Attribute;
+import net.amoebaman.amoebautils.nms.Attributes.Attribute;
 
 /**
  * A class that eases the manipulation of item attributes to attach

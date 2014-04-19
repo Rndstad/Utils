@@ -1,9 +1,9 @@
-package net.amoebaman.utils.chat;
+package net.amoebaman.amoebautils.chat;
 
 import java.util.List;
 
-import net.amoebaman.utils.GenUtil;
-import net.amoebaman.utils.nms.ReflectionUtil;
+import net.amoebaman.amoebautils.AmoebaUtils;
+import net.amoebaman.amoebautils.nms.ReflectionUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,7 +33,7 @@ public class Chat{
 	 * applicable as possible.
 	 * <p>
 	 * The inputted message objects will first be fully unpacked using
-	 * {@link GenUtil#expand(Object...)}, ensuring no containers or arrays will be sent
+	 * {@link AmoebaUtils#expand(Object...)}, ensuring no containers or arrays will be sent
 	 * directly, but that their contents will be sent individually.
 	 * <p>
 	 * {@link Message}{@code s} using JSON will be parsed out to their JSON plaintext
@@ -49,7 +49,7 @@ public class Chat{
 	 * @param messages some messages
 	 */
 	public static void send(CommandSender receiver, Object... messages){
-		for(Object message : GenUtil.expand(messages))
+		for(Object message : AmoebaUtils.expand(messages))
 			if(message instanceof Message && ((Message) message).usesJson())
 				if(receiver instanceof Player){
 					try{

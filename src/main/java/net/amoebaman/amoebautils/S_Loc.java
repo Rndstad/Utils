@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

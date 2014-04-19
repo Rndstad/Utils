@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import java.io.StringWriter;
 import java.util.List;
@@ -22,8 +22,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 
-import net.amoebaman.utils.nms.Attributes;
-import net.amoebaman.utils.nms.Attributes.Attribute;
+import net.amoebaman.amoebautils.nms.Attributes;
+import net.amoebaman.amoebautils.nms.Attributes.Attribute;
 
 /**
  * Extension of the Google libs JsonWriter included in CraftBukkit. It contains
