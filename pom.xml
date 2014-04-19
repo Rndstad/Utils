@@ -4,7 +4,7 @@
 		<modelVersion>4.0.0</modelVersion>
 
 		<groupId>net.amoebaman</groupId>
-		<artifactId>utils</artifactId>
+		<artifactId>amoebautils</artifactId>
 		<version>1.1</version>
 
 		<repositories>
@@ -53,6 +53,15 @@
 
 		<build>
 				<sourceDirectory>src/main/java</sourceDirectory>
+				<resources>
+				        <resource>
+				                <targetPath>.</targetPath>
+				                <directory>src/main/resources</directory>
+				                <includes>
+				                        <include>*.yml</include>
+				                </includes>
+				        </resource>
+				</resources>
 				<plugins>
 						<plugin>
 								<groupId>org.apache.maven.plugins</groupId>
