@@ -1,4 +1,4 @@
-package net.amoebaman.utils;
+package net.amoebaman.amoebautils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

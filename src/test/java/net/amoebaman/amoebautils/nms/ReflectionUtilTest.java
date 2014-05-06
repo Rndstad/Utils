@@ -1,4 +1,4 @@
-package net.amoebaman.utils.nms;
+package net.amoebaman.amoebautils.nms;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
