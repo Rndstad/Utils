@@ -12,11 +12,6 @@
 						<id>bukkit-repo</id>
 						<url>http://repo.bukkit.org/content/groups/public/</url>
 				</repository>
-				<repository>
-						<id>heroes-repo</id>
-						<name>Private Releases</name>
-						<url>http://nexus.theyeticave.net/content/repositories/releases/</url>
-				</repository>
 		</repositories>
 
 		<dependencies>
@@ -24,11 +19,13 @@
 						<groupId>org.bukkit</groupId>
 						<artifactId>bukkit</artifactId>
 						<version>1.7.8-R0.1-SNAPSHOT</version>
+						<scope>provided</scope>
 				</dependency>
 				<dependency>
 						<groupId>org.bukkit</groupId>
 						<artifactId>craftbukkit</artifactId>
 						<version>1.7.8-R0.1-SNAPSHOT</version>
+						<scope>provided</scope>
 				</dependency>
 				<dependency>
 						<groupId>org.powermock</groupId>
