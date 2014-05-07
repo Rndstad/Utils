@@ -1,5 +1,6 @@
 package net.amoebaman.amoebautils.chat;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +11,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import net.amoebaman.amoebautils.JsonWriter;
 import net.amoebaman.amoebautils.nms.ReflectionUtil;
-
 
 /**
  * This class provides a chainable method for constructing messages to be
@@ -337,7 +337,8 @@ public class Message {
 		String escSeq = "\\\"";
 		String metaEsc = String.valueOf((char) 128);
 		
-		JsonWriter json = new JsonWriter();
+		StringWriter str = new StringWriter();
+		JsonWriter json = new JsonWriter(str);
 		try {
 			json.beginObject();
 			json.name("id").value(1);
@@ -352,8 +353,9 @@ public class Message {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		String result = json.toString();
-		json.close();
+		String result = str.toString();
+		try{ json.close(); }
+		catch(Exception e){ e.printStackTrace(); }
 		return result.replace(fbdn, "").replace(metaEsc, escSeq);
 	}
 	
@@ -411,7 +413,8 @@ public class Message {
 		
 		getText();
 		
-		JsonWriter json = new JsonWriter();
+		StringWriter str = new StringWriter();
+		JsonWriter json = new JsonWriter(str);
 		try {
 			json.beginArray();
 			for (MessagePart part : messageParts)
@@ -421,7 +424,7 @@ public class Message {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		jsonText = json.toString().replace(String.valueOf((char) 128), "\\\"");
+		jsonText = str.toString().replace(String.valueOf((char) 128), "\\\"");
 		if(scheme != null)
 			jsonText = scheme.prefix + jsonText + scheme.suffix;
 		jsonWritten = true;
