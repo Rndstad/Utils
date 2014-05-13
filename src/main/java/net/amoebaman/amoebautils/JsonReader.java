@@ -77,12 +77,12 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 					while(peek() != JsonToken.END_OBJECT){
 						name = nextName();
 						if(name.equals("name"))
-							meta.setDisplayName(ChatColor.RESET + nextString());
+							meta.setDisplayName(nextString());
 						if(name.equals("lore")){
 							beginArray();
 							List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<String>();
 							while(peek() != JsonToken.END_ARRAY)
-								lore.add(ChatColor.RESET + nextString());
+								lore.add(nextString());
 							meta.setLore(lore);
 							endArray();
 						}
