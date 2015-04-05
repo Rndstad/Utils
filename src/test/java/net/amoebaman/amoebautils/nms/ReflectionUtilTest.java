@@ -15,12 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import net.amoebaman.amoebautils.nms.ReflectionUtil;
 
-@RunWith(PowerMockRunner.class)
 public class ReflectionUtilTest{
 	
 	@Ignore

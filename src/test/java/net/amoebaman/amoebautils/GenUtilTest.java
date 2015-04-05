@@ -10,17 +10,11 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import net.amoebaman.amoebautils.AmoebaUtils;
-
-import net.minecraft.util.com.google.common.collect.Lists;
-
-@RunWith(PowerMockRunner.class)
 public class GenUtilTest{
 	
 	public static Player mockPlayer(String name){
