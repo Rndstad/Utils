@@ -1,7 +1,6 @@
 package net.amoebaman.amoebautils.maps;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.common.collect.Sets;
 
