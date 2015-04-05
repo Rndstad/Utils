@@ -4,19 +4,20 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.bukkit.*;
-import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonToken;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.gson.stream.JsonToken;
+
 import net.amoebaman.amoebautils.nms.*;
 import net.amoebaman.amoebautils.nms.Attributes.Attribute;
 import net.amoebaman.amoebautils.nms.Attributes.AttributeType;
 import net.amoebaman.amoebautils.nms.Attributes.Operation;
 
-public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader{
+public class JsonReader extends com.google.gson.stream.JsonReader{
 	
 	public JsonReader(String str){
 		super(new StringReader(str));

@@ -464,9 +464,9 @@ public class NbtFactory {
 		}
 		finally {
 			if(data != null)
-				Closeables.closeQuietly(data);
+				data.close();
 			if(output != null)
-				Closeables.closeQuietly(output);
+				output.close();
 		}
 	}
 	

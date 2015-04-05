@@ -9,24 +9,12 @@
 
 		<repositories>
 				<repository>
-						<id>bukkit-repo</id>
-						<url>http://repo.bukkit.org/content/groups/public/</url>
+						<id>spigot-repo</id>
+						<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 				</repository>
 		</repositories>
 
 		<dependencies>
-				<dependency>
-						<groupId>org.bukkit</groupId>
-						<artifactId>bukkit</artifactId>
-						<version>1.7.9-R0.1-SNAPSHOT</version>
-						<scope>provided</scope>
-				</dependency>
-				<dependency>
-						<groupId>org.bukkit</groupId>
-						<artifactId>craftbukkit</artifactId>
-						<version>1.7.9-R0.1-SNAPSHOT</version>
-						<scope>provided</scope>
-				</dependency>
 				<dependency>
 						<groupId>org.powermock</groupId>
 						<artifactId>powermock-module-junit4</artifactId>
@@ -39,22 +27,32 @@
 						<version>1.5.4</version>
 						<scope>test</scope>
 				</dependency>
+				<dependency>
+						<groupId>org.spigotmc</groupId>
+						<artifactId>spigot-api</artifactId>
+						<version>1.8-R0.1-SNAPSHOT</version>
+				</dependency>
+				<dependency>
+						<groupId>org.bukkit</groupId>
+						<artifactId>bukkit</artifactId>
+						<version>1.8-R0.1-SNAPSHOT</version>
+				</dependency>
 		</dependencies>
 
 		<distributionManagement>
-                <repository>
-                        <id>amoeba-repo</id>
-                        <url>http://local.amoebaman.net:8081/nexus/content/repositories/amoeba-repo/</url>
-                </repository>
+				<repository>
+						<id>amoeba-repo</id>
+						<url>http://local.amoebaman.net:8081/nexus/content/repositories/amoeba-repo/</url>
+				</repository>
 		</distributionManagement>
 
 		<build>
 				<sourceDirectory>src/main/java</sourceDirectory>
 				<resources>
-				        <resource>
-				                <targetPath>.</targetPath>
-				                <directory>src/main/resources</directory>
-				        </resource>
+						<resource>
+								<targetPath>.</targetPath>
+								<directory>src/main/resources</directory>
+						</resource>
 				</resources>
 				<plugins>
 						<plugin>

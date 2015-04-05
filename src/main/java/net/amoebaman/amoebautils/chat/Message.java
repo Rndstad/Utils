@@ -11,10 +11,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import net.amoebaman.amoebautils.JsonWriter;
 import net.amoebaman.amoebautils.nms.ReflectionUtil;
 
 /**
