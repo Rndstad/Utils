@@ -33,7 +33,7 @@ import net.amoebaman.amoebautils.nms.Attributes.Attribute;
  * 
  * @author AmoebaMan
  */
-public class JsonWriter extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter {
+public class JsonWriter extends com.google.gson.stream.JsonWriter {
 	
 	private StringWriter out;
 	

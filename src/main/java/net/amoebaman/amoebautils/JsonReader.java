@@ -3,6 +3,7 @@ package net.amoebaman.amoebautils;
 import java.io.StringReader;
 import java.util.*;
 
+import com.google.gson.stream.JsonToken;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -10,14 +11,12 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonToken;
-
 import net.amoebaman.amoebautils.nms.*;
 import net.amoebaman.amoebautils.nms.Attributes.Attribute;
 import net.amoebaman.amoebautils.nms.Attributes.AttributeType;
 import net.amoebaman.amoebautils.nms.Attributes.Operation;
 
-public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader{
+public class JsonReader extends com.google.gson.stream.JsonReader{
 	
 	public JsonReader(String str){
 		super(new StringReader(str));
@@ -243,7 +242,7 @@ public class JsonReader extends org.bukkit.craftbukkit.libs.com.google.gson.stre
 	}
 	
 	public FireworkMeta readFirework(){
-		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK));
+		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.LEGACY_FIREWORK));
 	}
 	
 	public Map<String, String> readMap(){

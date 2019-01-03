@@ -124,7 +124,7 @@ public class YamlReader{
 	}
 	
 	public static FireworkMeta readFirework(ConfigurationSection section){
-		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK), section);
+		return readFirework((FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.LEGACY_FIREWORK), section);
 	}
 	
 	public static Location readLoc(ConfigurationSection section){
