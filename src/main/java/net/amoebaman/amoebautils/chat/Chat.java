@@ -150,8 +150,6 @@ public class Chat{
 				return ChatColor.DARK_PURPLE;
 			case RED:
 				return ChatColor.RED;
-			case SILVER:
-				return ChatColor.GRAY;
 			case WHITE:
 				return ChatColor.WHITE;
 			case YELLOW:
