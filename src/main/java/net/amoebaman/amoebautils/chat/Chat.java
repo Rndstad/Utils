@@ -21,10 +21,10 @@ import org.bukkit.entity.Player;
  * 
  * @author AmoebaMan
  */
-public class Chat{
+public class Chat {
 	
 	private static Class<?> nmsPacketPlayOutChat = ReflectionUtil.getNMSClass("PacketPlayOutChat");
-	private static Class<?> nmsChatSerializer = ReflectionUtil.getNMSClass("ChatSerializer");
+	private static Class<?> nmsChatSerializer = ReflectionUtil.getNMSClass("IChatBaseComponent.ChatSerializer");
 	
 	/**
 	 * Sends a message, or many messages, to the player (or console). Various
