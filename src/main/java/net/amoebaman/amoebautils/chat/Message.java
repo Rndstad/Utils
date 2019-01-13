@@ -27,7 +27,7 @@ import net.amoebaman.amoebautils.nms.ReflectionUtil;
 public class Message {
 	
 	private static Class<?> nmsTagCompound = ReflectionUtil.getNMSClass("NBTTagCompound");
-	private static Class<?> nmsAchievement = ReflectionUtil.getNMSClass("Achievement");
+	private static Class<?> nmsAchievement = ReflectionUtil.getNMSClass("Advancement");
 	private static Class<?> nmsStatistic = ReflectionUtil.getNMSClass("Statistic");
 	private static Class<?> nmsItemStack = ReflectionUtil.getNMSClass("ItemStack");
 	
