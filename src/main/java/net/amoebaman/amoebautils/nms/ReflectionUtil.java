@@ -22,11 +22,11 @@ public class ReflectionUtil {
 	 * 
 	 * @return the package version
 	 */
-	public static String getVersion(){
+	public static String getVersion() {
         String name = Bukkit.getServer().getClass().getPackage().getName();
         String version = name.substring(name.lastIndexOf('.') + 1);
-        return version;
-	}
+        return "v1_13_R1";
+    }
 
 	/**
 	 * Gets a NMS (net.minecraft.server) class by its name.

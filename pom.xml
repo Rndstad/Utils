@@ -33,14 +33,6 @@
 				<version>1.13.2-R0.1-SNAPSHOT</version>
 				<scope>provided</scope>
 			</dependency>
-			<!--Bukkit API-->
-			<!--You only need one of the two, don't put both. Spigot is recommended.-->
-			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.13.2-R0.1-SNAPSHOT</version>
-				<scope>provided</scope>
-			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
