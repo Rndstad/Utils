@@ -15,9 +15,6 @@ import org.bukkit.Bukkit;
  */
 public class ReflectionUtil {
 
-    private static final String R1 = "v1_13_R1";
-    private static final String R2 = "v1_13_R2";
-
     /**
 	 * Gets the version string used in the current version of
 	 * Bukkit/CraftBukkit's package tree, to be used to access classes via
@@ -28,7 +25,7 @@ public class ReflectionUtil {
 	public static String getVersion() {
         String name = Bukkit.getServer().getClass().getPackage().getName();
         String version = name.substring(name.lastIndexOf('.') + 1);
-        return "v1_13_R1";
+        return version;
     }
 
 	/**
@@ -38,7 +35,7 @@ public class ReflectionUtil {
 	 * @return the class, or null if none was found
 	 */
     public static Class<?> getNMSClass(String className) {
-        String fullName = "net.minecraft.server." + R2 + "." + className;
+        String fullName = "net.minecraft.server." + getVersion() + "." + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
@@ -55,7 +52,7 @@ public class ReflectionUtil {
      * @return the class, or null if none was found
      */
     public static Class<?> getOBCClass(String className){
-        String fullName = "org.bukkit.craftbukkit." + R1 + "." + className;
+        String fullName = "org.bukkit.craftbukkit." + getVersion() + "." + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
